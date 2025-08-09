@@ -341,28 +341,34 @@
             .service-card {
                 padding: 2em 0.7em;
             }
-            .service-cards {
-        flex-direction: column;
-        align-items: center;
-        gap: 1.2em;
+            /* Replace your existing mobile styles for .service-card and .service-cards with this for best mobile support */
+@media (max-width: 600px) {
+    .service-cards {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 1.2em !important;
+        padding: 0 !important;
     }
     .service-card {
-        min-width: 0;
-        width: 98vw;
-        max-width: 420px;
-        box-sizing: border-box;
-        padding: 2em 0.7em;
-        margin: 0 auto;
+        min-width: 0 !important;
+        width: 100vw !important;
+        max-width: 99vw !important;
+        box-sizing: border-box !important;
+        padding: 2em 0.7em !important;
+        margin: 0 auto !important;
+        border-radius: 1.2em !important;
     }
     .service-card .buy-btn,
     .service-card a.buy-btn {
-        width: 100%;
-        box-sizing: border-box;
-        font-size: 1.08rem;
-        padding: 1em 0;
-        margin-left: 0;
-        margin-right: 0;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        font-size: 1.08rem !important;
+        padding: 1em 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        border-radius: 10px !important;
     }
+}
         }
     </style>
 </head>
@@ -617,3 +623,5 @@ if (typeof addToBasketAnim === "function") {
     }
 }
 </script>
+</body>
+</html>
