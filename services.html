@@ -360,13 +360,53 @@
     }
     .service-card .buy-btn,
     .service-card a.buy-btn {
-        width: 100% !important;
-        box-sizing: border-box !important;
-        font-size: 1.08rem !important;
-        padding: 1em 0 !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        border-radius: 10px !important;
+        display: none !important;
+    }
+    .service-card {
+        cursor: pointer;
+        position: relative;
+    }
+    .service-card .service-details {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 50%;
+        top: 50%;
+        width: 92vw;
+        max-width: 400px;
+        background: #23243a;
+        color: #fff;
+        border-radius: 1.2em;
+        box-shadow: 0 8px 32px #6366f144;
+        padding: 2em 1em 1.5em 1em;
+        transform: translate(-50%, -50%);
+        text-align: left;
+        overflow-y: auto;
+        max-height: 90vh;
+        animation: fadeIn .2s;
+    }
+    .service-card .service-details.active {
+        display: block;
+    }
+    .service-card .close-details {
+        position: absolute;
+        top: 1em;
+        right: 1.2em;
+        background: none;
+        border: none;
+        color: #a5b4fc;
+        font-size: 2rem;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 2;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translate(-50%, -40%);}
+        to { opacity: 1; transform: translate(-50%, -50%);}
+    }
+    /* Fix text cutoff in card */
+    .service-card ul {
+        margin-bottom: 1.5em !important;
     }
 }
         }
@@ -585,43 +625,3 @@ setInterval(updateCountdown, 1000);
     window.addEventListener('DOMContentLoaded', () => {
       document.body.classList.remove('fade-out');
     });
-    </script>
-    <style>
-    /* Fix nav bar centering flash on initial load */
-    .navigation-tab,
-    .navigation-tab--compact {
-      left: 50vw !important;
-      transform: translateX(-50%) !important;
-    }
-    </style>
-    <!-- Add this script at the end of <body> on EVERY PAGE (after your other scripts): -->
-<script>
-function updateBasketBadge() {
-    var badge = document.getElementById('basket-badge');
-    if (!badge) return;
-    let items = [];
-    try {
-        items = JSON.parse(localStorage.getItem('rlbasket')) || [];
-    } catch {}
-    if (items.length > 0) {
-        badge.textContent = items.length;
-        badge.style.display = '';
-    } else {
-        badge.style.display = 'none';
-    }
-}
-updateBasketBadge();
-window.addEventListener('storage', updateBasketBadge);
-window.updateBasketBadge = updateBasketBadge;
-
-// Patch addToBasketAnim if it exists
-if (typeof addToBasketAnim === "function") {
-    const orig = addToBasketAnim;
-    window.addToBasketAnim = function(...args) {
-        orig.apply(this, args);
-        setTimeout(updateBasketBadge, 100);
-    }
-}
-</script>
-</body>
-</html>
