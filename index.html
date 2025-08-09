@@ -210,6 +210,82 @@
                 height: 22px;
             }
         }
+        /* Add or update these styles in your <style> tag for better mobile friendliness */
+
+@media (max-width: 900px) {
+    .features-grid, .testimonials-grid, .how-steps {
+        flex-direction: column;
+        align-items: center;
+    }
+    .features-section, .testimonials-section, .how-section {
+        padding: 0 0.5em;
+    }
+}
+
+@media (max-width: 600px) {
+    header, .features-section, .testimonials-section, .discord-section, footer, .how-section {
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+    .hero-glass {
+        padding: 2em 1em;
+    }
+    .testimonial-carousel {
+        max-width: 98vw;
+    }
+    .testimonial-card {
+        padding: 2em 0.5em;
+        font-size: 1.1rem;
+    }
+    .how-step {
+        padding: 2em 0.7em;
+    }
+    .navigation-tab,
+    .navigation-tab--compact {
+        width: 98vw;
+        min-width: 0;
+        left: 1vw;
+        transform: none;
+        padding: 0 2px;
+        height: 60px;
+        bottom: 12px;
+    }
+    .navigation-tab--compact .navigation-tab-item,
+    .navigation-tab .navigation-tab-item {
+        width: 48px;
+        min-width: 48px;
+        height: 48px;
+        padding: 0;
+    }
+    .navigation-tab--compact .navigation-tab__icon,
+    .navigation-tab .navigation-tab__icon {
+        height: 22px;
+        width: 22px;
+    }
+    .navigation-tab--compact .navigation-tab__icon svg,
+    .navigation-tab .navigation-tab__icon svg {
+        width: 22px;
+        height: 22px;
+    }
+    #logo {
+        width: 48px;
+        margin-top: 1em;
+    }
+    h1 {
+        font-size: 1.5rem;
+    }
+    .hero-glass h2 {
+        font-size: 1.3rem;
+    }
+    .features-title, .how-title {
+        font-size: 1.3rem;
+    }
+    .feature-card {
+        min-width: 0;
+        width: 95vw;
+        box-sizing: border-box;
+    }
+}
         .fade-transition {
             opacity: 1;
             transition: opacity 0.6s cubic-bezier(.4,0,.2,1);
@@ -500,6 +576,51 @@
             }
             .how-step {
                 padding: 2em 0.7em;
+            }
+            .navigation-tab,
+            .navigation-tab--compact {
+                width: 98vw;
+                min-width: 0;
+                left: 1vw;
+                transform: none;
+                padding: 0 2px;
+                height: 60px;
+                bottom: 12px;
+            }
+            .navigation-tab--compact .navigation-tab-item,
+            .navigation-tab .navigation-tab-item {
+                width: 48px;
+                min-width: 48px;
+                height: 48px;
+                padding: 0;
+            }
+            .navigation-tab--compact .navigation-tab__icon,
+            .navigation-tab .navigation-tab__icon {
+                height: 22px;
+                width: 22px;
+            }
+            .navigation-tab--compact .navigation-tab__icon svg,
+            .navigation-tab .navigation-tab__icon svg {
+                width: 22px;
+                height: 22px;
+            }
+            #logo {
+                width: 48px;
+                margin-top: 1em;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .hero-glass h2 {
+                font-size: 1.3rem;
+            }
+            .features-title, .how-title {
+                font-size: 1.3rem;
+            }
+            .feature-card {
+                min-width: 0;
+                width: 95vw;
+                box-sizing: border-box;
             }
         }
         .discord-section {
