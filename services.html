@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RL Boosting - Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #6366f1;
+            --accent2: #ff3b30;
+            --accent-gradient: linear-gradient(120deg, #6366f1 0%, #a5b4fc 100%);
+            --bg: #181a20;
+            --glass-bg: rgba(255,255,255,0.09);
+            --glass-blur: blur(18px);
+            --radius: 1.5em;
+            --shadow: 0 8px 32px rgba(99,102,241,0.13), 0 1.5px 4px rgba(0,0,0,0.04);
+            --transition: 0.22s cubic-bezier(.4,0,.2,1);
+            --font-main: 'Inter', 'Segoe UI', 'Roboto', Arial, sans-serif;
+        }
+        html, body {
+            height: 100%;
+        }
+        body.fade-transition.services-bg {
+            font-family: var(--font-main);
+            background: var(--bg);
+            color: #e5e7ef;
+            letter-spacing: 0.01em;
+            font-size: 1.08rem;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
+            transition: background 0.8s cubic-bezier(.4,0,.2,1), opacity 0.6s cubic-bezier(.4,0,.2,1);
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(ellipse at 60% 40%, #6366f1 0%, transparent 70%),
+                        radial-gradient(ellipse at 30% 80%, #a5b4fc 0%, transparent 80%);
+            opacity: 0.18;
+            filter: blur(18px);
+            animation: bgmove 12s linear infinite alternate;
+        }
+        @keyframes bgmove {
+            0% { background-position: 60% 40%, 30% 80%; }
+            100% { background-position: 80% 60%, 10% 60%; }
+        }
+        .bg-shape {
+            position: fixed;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.22;
+            filter: blur(18px);
+            transition: opacity 0.6s;
+        }
+        .bg-shape.shape1 {
+            top: -120px; left: -80px;
+            width: 420px; height: 420px;
+            background: radial-gradient(circle at 40% 40%, #6366f1 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .bg-shape.shape2 {
+            bottom: -100px; right: -120px;
+            width: 380px; height: 380px;
+            background: radial-gradient(circle at 60% 60%, #a5b4fc 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .bg-shape.shape3 {
+            top: 60vh; left: 50vw;
+            width: 220px; height: 220px;
+            background: radial-gradient(circle at 50% 50%, #fff 0%, transparent 80%);
+            border-radius: 50%;
+        }
+        .dev-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: var(--accent2);
+            color: #fff;
+            padding: 0.5em 1.5em;
+            font-size: 1rem;
+            font-weight: bold;
+            z-index: 1000;
+            border-radius: 0 0 1em 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            letter-spacing: 1px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2em;
+        }
+        #logo {
+            width: 70px;
+            border-radius: 16px;
+            margin-top: 2em;
+            box-shadow: 0 4px 32px #6366f144;
+        }
+        h1 {
+            color: #fff;
+            font-size: 2.7rem;
+            margin: 0.5em 0 0 0;
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 16px #6366f144;
+        }
+        nav {
+            margin-top: 1.5em;
+        }
+        .navigation-tab,
+        .navigation-tab--compact {
+            position: fixed;
+            left: 50vw;
+            bottom: 28px;
+            transform: translateX(-50%);
+            height: 70px;
+            width: 370px;
+            background: rgba(24,26,32,0.96);
+            box-shadow: 0 8px 32px rgba(99,102,241,0.13), 0 1.5px 4px rgba(0,0,0,0.04);
+            border-radius: 2em 2em 2.5em 2.5em;
+            border: 1.5px solid #2d2f3a;
+            display: flex;
+            z-index: 100;
+            margin: 0;
+            padding: 0 1.5em;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5em;
+            backdrop-filter: blur(12px);
+        }
+        .navigation-tab--compact .navigation-tab-item,
+        .navigation-tab .navigation-tab-item {
+            width: 60px;
+            height: 60px;
+            margin: 0 6px;
+            border-radius: 50%;
+            background: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: background 0.22s cubic-bezier(.4,0,.2,1), box-shadow 0.22s cubic-bezier(.4,0,.2,1), transform 0.22s cubic-bezier(.4,0,.2,1);
+            box-shadow: none;
+            padding: 0;
+            cursor: pointer;
+        }
+        .navigation-tab--compact .navigation-tab-item.active,
+        .navigation-tab .navigation-tab-item.active {
+            background: #23243a;
+        }
+        .navigation-tab--compact .navigation-tab__icon,
+        .navigation-tab .navigation-tab__icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 32px;
+            width: 32px;
+            margin: 0 auto;
+            animation: navBob 2.8s ease-in-out infinite;
+            animation-delay: calc(var(--nav-index, 0) * 0.22s);
+        }
+        .navigation-tab--compact .navigation-tab__icon svg,
+        .navigation-tab .navigation-tab__icon svg {
+            width: 28px;
+            height: 28px;
+            color: #a5b4fc;
+            animation: none;
+            transform-origin: 50% 60%;
+            filter: drop-shadow(0 2px 8px #6366f144);
+            transition: color 0.22s cubic-bezier(.4,0,.2,1), filter 0.22s cubic-bezier(.4,0,.2,1);
+            display: block;
+        }
+        @keyframes navBob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        @media (max-width: 500px) {
+            .navigation-tab,
+            .navigation-tab--compact {
+                width: 98vw;
+                min-width: 0;
+                left: 1vw;
+                transform: none;
+                padding: 0 2px;
+                height: 60px;
+                bottom: 12px;
+            }
+            .navigation-tab--compact .navigation-tab-item,
+            .navigation-tab .navigation-tab-item {
+                width: 48px;
+                min-width: 48px;
+                height: 48px;
+                padding: 0;
+            }
+            .navigation-tab--compact .navigation-tab__icon,
+            .navigation-tab .navigation-tab__icon {
+                height: 22px;
+                width: 22px;
+            }
+            .navigation-tab--compact .navigation-tab__icon svg,
+            .navigation-tab .navigation-tab__icon svg {
+                width: 22px;
+                height: 22px;
+            }
+        }
+        .fade-transition {
+            opacity: 1;
+            transition: opacity 0.6s cubic-bezier(.4,0,.2,1);
+        }
+        .fade-transition.fade-out {
+            opacity: 0;
+        }
+        .services-section {
+            max-width: 1200px;
+            margin: 4em auto 3em auto;
+            padding: 0 1em;
+            padding-bottom: 120px; /* Add this line or increase if needed */
+        }
+        .services-title {
+            text-align: center;
+            color: #6366f1;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 2.5em;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 16px #6366f144;
+        }
+        .service-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2.5em;
+            justify-content: center;
+        }
+        .service-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-radius: 1.5em;
+            box-shadow: 0 6px 24px rgba(99,102,241,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+            padding: 2.5em 2em;
+            min-width: 260px;
+            max-width: 340px;
+            flex: 1 1 300px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 12px 32px rgba(99,102,241,0.13), 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .service-card .icon {
+            font-size: 2.7rem;
+            margin-bottom: 0.7em;
+            color: #6366f1;
+        }
+        .service-card h3 {
+            color: #fff;
+            margin-bottom: 1em;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-shadow: 0 2px 16px #6366f144;
+        }
+        .price-tag {
+            display: inline-block;
+            background: linear-gradient(90deg,#6366f1,#a5b4fc);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.3rem;
+            border-radius: 8px;
+            padding: 0.4em 1.2em;
+            margin-bottom: 1em;
+            box-shadow: 0 2px 8px #6366f122;
+            letter-spacing: 1px;
+        }
+        .service-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 1em 0 0 0;
+            color: #a5b4fc;
+            font-size: 1rem;
+        }
+        .service-card ul li {
+            margin-bottom: 0.5em;
+        }
+        .service-card .buy-btn {
+            margin-top: 1.2em;
+            background: var(--accent-gradient);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 0.9em 2.2em;
+            font-size: 1.08rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 12px #6366f122;
+            transition: background 0.2s, transform 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .service-card .buy-btn:hover {
+            background: linear-gradient(90deg,#4f46e5,#6366f1);
+            transform: translateY(-2px) scale(1.07);
+        }
+        .cart-anim {
+            display: inline-block;
+            vertical-align: middle;
+            animation: cartBob 1.2s infinite;
+        }
+        @keyframes cartBob {
+            0%, 100% { transform: translateY(0);}
+            50% { transform: translateY(-10px);}
+        }
+        .added-to-basket {
+            opacity: 0;
+            transform: translateY(10px) scale(0.95);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+        .added-to-basket.show {
+            display: block !important;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        @media (max-width: 900px) {
+            .service-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        @media (max-width: 600px) {
+            header, .services-section {
+                padding-left: 0.5em;
+                padding-right: 0.5em;
+            }
+            .service-card {
+                padding: 2em 0.7em;
+            }
+        }
+    </style>
+</head>
+<body class="fade-transition services-bg">
+    <div class="bg-shape shape1"></div>
+    <div class="bg-shape shape2"></div>
+    <div class="bg-shape shape3"></div>
+    <div class="dev-banner">Work in Development</div>
+    <header>
+        <img src="https://i.pinimg.com/originals/12/44/02/12440274c10c5f0f95b2766904b80bc3.jpg" alt="Logo" id="logo">
+        <h1>RL Boosting</h1>
+    </header>
+    <!-- Add this widget at the very top of your <body> in services.html, just after <body> and before any other content -->
+<div id="countdown-widget" style="max-width:600px;margin:2em auto 1.5em auto;padding:1.5em 1em 1.2em 1em;background:rgba(99,102,241,0.13);border-radius:1.5em;box-shadow:0 4px 24px #6366f122,0 1.5px 4px rgba(0,0,0,0.04);text-align:center;backdrop-filter:blur(8px);">
+  <div style="font-size:1.35rem;font-weight:700;color:#6366f1;letter-spacing:-1px;margin-bottom:0.5em;">
+    Free Trial Offer Ends Soon!
+  </div>
+  <div style="color:#fff;font-size:1.08rem;margin-bottom:1em;">
+    Claim your <b>free 3 game trial</b> before <span style="color:#a5b4fc;">September 20</span>!
+  </div>
+  <div id="countdown-timer" style="font-size:2.1rem;font-weight:800;color:#43e97b;letter-spacing:2px;"></div>
+</div>
+<script>
+function updateCountdown() {
+  // Set target date: September 20, 2025 23:59:59
+  const end = new Date('2025-09-20T23:59:59');
+  const now = new Date();
+  let diff = end - now;
+  if (diff < 0) diff = 0;
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff / (1000*60*60)) % 24);
+  const mins = Math.floor((diff / (1000*60)) % 60);
+  const secs = Math.floor((diff / 1000) % 60);
+  const el = document.getElementById('countdown-timer');
+  if (diff > 0) {
+    el.textContent =
+      (days > 0 ? days + "d " : "") +
+      String(hours).padStart(2,'0') + "h " +
+      String(mins).padStart(2,'0') + "m " +
+      String(secs).padStart(2,'0') + "s";
+  } else {
+    el.textContent = "Free Trial Ended";
+    document.getElementById('countdown-widget').style.background = "#f43f5e";
+    document.getElementById('countdown-widget').style.color = "#fff";
+  }
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+    <section class="services-section">
+      <div class="services-title">Boosting Packages</div>
+      <div class="service-cards">
+        <!-- Free Trial Card -->
+        <div class="service-card" style="border:2.5px solid #6366f1; box-shadow:0 0 0 3px #6366f144;">
+          <div class="icon" style="color:#43e97b;">🎁</div>
+          <h3 style="color:#43e97b;">Free Trial</h3>
+          <div class="price-tag" style="background:linear-gradient(90deg,#43e97b,#38f9d7);color:#222;">FREE</div>
+          <ul>
+            <li>3 ranked games with our grand champ players</li>
+            <li>No payment or card needed</li>
+            <li>Experience our service risk-free</li>
+          </ul>
+          <a href="https://discord.gg/wvCRx3NqNg" target="_blank" class="buy-btn" style="background:linear-gradient(90deg,#43e97b,#38f9d7);color:#222;font-weight:800;display:inline-block;text-decoration:none;">
+            Join Discord to Claim
+          </a>
+          <div class="added-to-basket" style="display:none; margin-top:1em;">
+            <span class="cart-anim">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#43e97b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1.5"/>
+                <circle cx="19" cy="21" r="1.5"/>
+                <path d="M2.5 4H5l2.68 13.39A2 2 0 0 0 9.62 19h7.76a2 2 0 0 0 1.94-1.61L21.5 7H6"/>
+              </svg>
+            </span>
+            <span style="color:#43e97b; font-weight:600; margin-left:0.7em;">Join Discord for Free Trial</span>
+          </div>
+        </div>
+        <!-- Existing Paid Packages Below -->
+        <div class="service-card">
+          <div class="icon">⚡</div>
+          <h3>Quick Boost</h3>
+          <div class="price-tag">€3.00</div>
+          <ul>
+            <li>1 hour boosting</li>
+            <li>Fast queue</li>
+            <li>Progress updates</li>
+          </ul>
+          <button class="buy-btn" onclick="addToBasketAnim(this, 'Quick Boost', 3.00)">Buy Now</button>
+          <div class="added-to-basket" style="display:none; margin-top:1em;">
+            <span class="cart-anim">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1.5"/>
+                <circle cx="19" cy="21" r="1.5"/>
+                <path d="M2.5 4H5l2.68 13.39A2 2 0 0 0 9.62 19h7.76a2 2 0 0 0 1.94-1.61L21.5 7H6"/>
+              </svg>
+            </span>
+            <span style="color:#6366f1; font-weight:600; margin-left:0.7em;">Added to basket</span>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="icon">🤝</div>
+          <h3>Team Up Session</h3>
+          <div class="price-tag">€7.00</div>
+          <ul>
+            <li>3 hours with Grand Champ staff</li>
+            <li>Find teammates or let us boost</li>
+            <li>Flexible scheduling</li>
+          </ul>
+          <button class="buy-btn" onclick="addToBasketAnim(this, 'Team Up Session', 7.00)">Buy Now</button>
+          <div class="added-to-basket" style="display:none; margin-top:1em;">
+            <span class="cart-anim">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1.5"/>
+                <circle cx="19" cy="21" r="1.5"/>
+                <path d="M2.5 4H5l2.68 13.39A2 2 0 0 0 9.62 19h7.76a2 2 0 0 0 1.94-1.61L21.5 7H6"/>
+              </svg>
+            </span>
+            <span style="color:#6366f1; font-weight:600; margin-left:0.7em;">Added to basket</span>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="icon">🔥</div>
+          <h3>Weekend Grind</h3>
+          <div class="price-tag">€12.00</div>
+          <ul>
+            <li>6 hours of Grand Champ tm8</li>
+            <li>Best value</li>
+            <li>Priority support</li>
+          </ul>
+          <button class="buy-btn" onclick="addToBasketAnim(this, 'Weekend Grind', 12.00)">Buy Now</button>
+          <div class="added-to-basket" style="display:none; margin-top:1em;">
+            <span class="cart-anim">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1.5"/>
+                <circle cx="19" cy="21" r="1.5"/>
+                <path d="M2.5 4H5l2.68 13.39A2 2 0 0 0 9.62 19h7.76a2 2 0 0 0 1.94-1.61L21.5 7H6"/>
+              </svg>
+            </span>
+            <span style="color:#6366f1; font-weight:600; margin-left:0.7em;">Added to basket</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <nav class="navigation-tab navigation-tab--compact" style="left:50vw;transform:translateX(-50%);">
+        <div class="navigation-tab-item{active_home}" onclick="window.location.href='index.html'" style="--nav-index:0">
+            <span class="navigation-tab__icon">
+                <!-- Home Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg>
+            </span>
+        </div>
+        <div class="navigation-tab-item{active_services}" onclick="window.location.href='services.html'" style="--nav-index:1">
+            <span class="navigation-tab__icon">
+                <!-- Services Icon (Tag) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+            </span>
+        </div>
+        <div class="navigation-tab-item{active_basket}" onclick="window.location.href='basket.html'" style="--nav-index:2">
+            <span class="navigation-tab__icon" style="position:relative;">
+                <!-- Basket Icon (Shopping Bag) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <span id="basket-badge" style="display:none;position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;background:#f43f5e;color:#fff;border-radius:50%;font-size:0.95rem;font-weight:700;line-height:20px;text-align:center;box-shadow:0 2px 8px #f43f5e44;pointer-events:none;z-index:2;"></span>
+            </span>
+        </div>
+        <div class="navigation-tab-item{active_chat}" onclick="window.location.href='chat.html'" style="--nav-index:3">
+            <span class="navigation-tab__icon">
+                <!-- Glassy Chat Bubble Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="url(#glass-gradient)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="glass-gradient" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#a5b4fc"/>
+                            <stop offset="100%" stop-color="#6366f1"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="url(#glass-gradient)" />
+                </svg>
+            </span>
+        </div>
+    </nav>
+    <script>
+    function addToBasketAnim(btn, name, price) {
+        // Save to basket
+        let items = [];
+        try {
+            items = JSON.parse(localStorage.getItem('rlbasket')) || [];
+        } catch {}
+        items.push({name, price});
+        localStorage.setItem('rlbasket', JSON.stringify(items));
+
+        // Animation: replace button with animated cart and message
+        const addedDiv = btn.parentElement.querySelector('.added-to-basket');
+        btn.style.display = 'none';
+        addedDiv.style.display = 'block';
+        setTimeout(() => {
+            addedDiv.classList.add('show');
+        }, 10);
+
+        // No redirect to basket!
+        // User stays on the page and can click basket icon when ready
+        if (window.updateBasketBadge) setTimeout(window.updateBasketBadge, 100);
+    }
+    </script>
+    <script>
+    document.querySelectorAll('.navigation-tab-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        const href = this.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+        if (href) {
+          e.preventDefault();
+          document.body.classList.add('fade-out');
+          setTimeout(() => {
+            window.location.href = href;
+          }, 600);
+        }
+      });
+    });
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.remove('fade-out');
+    });
+    </script>
+    <style>
+    /* Fix nav bar centering flash on initial load */
+    .navigation-tab,
+    .navigation-tab--compact {
+      left: 50vw !important;
+      transform: translateX(-50%) !important;
+    }
+    </style>
+    <!-- Add this script at the end of <body> on EVERY PAGE (after your other scripts): -->
+<script>
+function updateBasketBadge() {
+    var badge = document.getElementById('basket-badge');
+    if (!badge) return;
+    let items = [];
+    try {
+        items = JSON.parse(localStorage.getItem('rlbasket')) || [];
+    } catch {}
+    if (items.length > 0) {
+        badge.textContent = items.length;
+        badge.style.display = '';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+updateBasketBadge();
+window.addEventListener('storage', updateBasketBadge);
+window.updateBasketBadge = updateBasketBadge;
+
+// Patch addToBasketAnim if it exists
+if (typeof addToBasketAnim === "function") {
+    const orig = addToBasketAnim;
+    window.addToBasketAnim = function(...args) {
+        orig.apply(this, args);
+        setTimeout(updateBasketBadge, 100);
+    }
+}
+</script>

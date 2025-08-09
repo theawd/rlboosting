@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="RL Boosting - Basket">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basket - RL Boosting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #6366f1;
+            --accent2: #ff3b30;
+            --accent-gradient: linear-gradient(120deg, #6366f1 0%, #a5b4fc 100%);
+            --bg: #181a20;
+            --glass-bg: rgba(255,255,255,0.09);
+            --glass-blur: blur(18px);
+            --radius: 1.5em;
+            --shadow: 0 8px 32px rgba(99,102,241,0.13), 0 1.5px 4px rgba(0,0,0,0.04);
+            --transition: 0.22s cubic-bezier(.4,0,.2,1);
+            --font-main: 'Inter', 'Segoe UI', 'Roboto', Arial, sans-serif;
+        }
+        html, body {
+            height: 100%;
+        }
+        body.fade-transition {
+            font-family: var(--font-main);
+            background: var(--bg);
+            color: #e5e7ef;
+            letter-spacing: 0.01em;
+            font-size: 1.08rem;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
+            transition: background 0.8s cubic-bezier(.4,0,.2,1), opacity 0.6s cubic-bezier(.4,0,.2,1);
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(ellipse at 60% 40%, #6366f1 0%, transparent 70%),
+                        radial-gradient(ellipse at 30% 80%, #a5b4fc 0%, transparent 80%);
+            opacity: 0.18;
+            filter: blur(18px);
+            animation: bgmove 12s linear infinite alternate;
+        }
+        @keyframes bgmove {
+            0% { background-position: 60% 40%, 30% 80%; }
+            100% { background-position: 80% 60%, 10% 60%; }
+        }
+        .bg-shape {
+            position: fixed;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.22;
+            filter: blur(18px);
+            transition: opacity 0.6s;
+        }
+        .bg-shape.shape1 {
+            top: -120px; left: -80px;
+            width: 420px; height: 420px;
+            background: radial-gradient(circle at 40% 40%, #6366f1 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .bg-shape.shape2 {
+            bottom: -100px; right: -120px;
+            width: 380px; height: 380px;
+            background: radial-gradient(circle at 60% 60%, #a5b4fc 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .bg-shape.shape3 {
+            top: 60vh; left: 50vw;
+            width: 220px; height: 220px;
+            background: radial-gradient(circle at 50% 50%, #fff 0%, transparent 80%);
+            border-radius: 50%;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2em;
+        }
+        #logo {
+            width: 70px;
+            border-radius: 16px;
+            margin-top: 2em;
+            box-shadow: 0 4px 32px #6366f144;
+        }
+        h1 {
+            color: #fff;
+            font-size: 2.7rem;
+            margin: 0.5em 0 0 0;
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 16px #6366f144;
+        }
+        main {
+            max-width: 520px;
+            margin: 3em auto 7em auto;
+            padding: 0 1em;
+        }
+        .basket-section {
+            background: var(--glass-bg);
+            border-radius: 1.5em;
+            box-shadow: 0 6px 24px rgba(99,102,241,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+            padding: 2.5em 2em;
+            margin-bottom: 2em;
+            text-align: center;
+            backdrop-filter: var(--glass-blur);
+        }
+        .basket-section h2 {
+            color: #6366f1;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.7em;
+            text-align: center;
+        }
+        .basket-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5em 0;
+        }
+        .basket-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1em 0;
+            border-bottom: 1px solid #2d2f3a;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+        .basket-list li:last-child {
+            border-bottom: none;
+        }
+        .basket-total {
+            text-align: right;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #6366f1;
+            margin-bottom: 1.5em;
+        }
+        .checkout-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(90deg, #6366f1 0%, #a5b4fc 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 1em 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(99,102,241,0.13);
+            transition: background 0.2s, transform 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .checkout-btn:hover {
+            background: linear-gradient(90deg, #4f46e5 0%, #6366f1 100%);
+            transform: translateY(-2px) scale(1.04);
+        }
+        .empty-basket {
+            text-align: center;
+            color: #a5b4fc;
+            font-size: 1.1rem;
+            margin: 2em 0;
+        }
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #f43f5e;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-left: 1em;
+            transition: color 0.2s;
+        }
+        .remove-btn:hover {
+            color: #be123c;
+        }
+        .navigation-tab,
+        .navigation-tab--compact {
+            position: fixed;
+            left: 50vw;
+            bottom: 28px;
+            transform: translateX(-50%);
+            height: 70px;
+            width: 370px;
+            background: rgba(24,26,32,0.96);
+            box-shadow: 0 8px 32px rgba(99,102,241,0.13), 0 1.5px 4px rgba(0,0,0,0.04);
+            border-radius: 2em 2em 2.5em 2.5em;
+            border: 1.5px solid #2d2f3a;
+            display: flex;
+            z-index: 100;
+            margin: 0;
+            padding: 0 1.5em;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5em;
+            backdrop-filter: blur(12px);
+        }
+        .navigation-tab--compact .navigation-tab-item,
+        .navigation-tab .navigation-tab-item {
+            width: 60px;
+            height: 60px;
+            margin: 0 6px;
+            border-radius: 50%;
+            background: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: background 0.22s cubic-bezier(.4,0,.2,1), box-shadow 0.22s cubic-bezier(.4,0,.2,1), transform 0.22s cubic-bezier(.4,0,.2,1);
+            box-shadow: none;
+            padding: 0;
+            cursor: pointer;
+        }
+        .navigation-tab--compact .navigation-tab-item.active,
+        .navigation-tab .navigation-tab-item.active {
+            background: #23243a;
+        }
+        .navigation-tab--compact .navigation-tab__icon,
+        .navigation-tab .navigation-tab__icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 32px;
+            width: 32px;
+            margin: 0 auto;
+            animation: navBob 2.8s ease-in-out infinite;
+            animation-delay: calc(var(--nav-index, 0) * 0.22s);
+        }
+        .navigation-tab--compact .navigation-tab__icon svg,
+        .navigation-tab .navigation-tab__icon svg {
+            width: 28px;
+            height: 28px;
+            color: #a5b4fc;
+            animation: none;
+            transform-origin: 50% 60%;
+            filter: drop-shadow(0 2px 8px #6366f144);
+            transition: color 0.22s cubic-bezier(.4,0,.2,1), filter 0.22s cubic-bezier(.4,0,.2,1);
+            display: block;
+        }
+        @keyframes navBob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        @media (max-width: 500px) {
+            .navigation-tab,
+            .navigation-tab--compact {
+                width: 98vw;
+                min-width: 0;
+                left: 1vw;
+                transform: none;
+                padding: 0 2px;
+                height: 60px;
+                bottom: 12px;
+            }
+            .navigation-tab--compact .navigation-tab-item,
+            .navigation-tab .navigation-tab-item {
+                width: 48px;
+                min-width: 48px;
+                height: 48px;
+                padding: 0;
+            }
+            .navigation-tab--compact .navigation-tab__icon,
+            .navigation-tab .navigation-tab__icon {
+                height: 22px;
+                width: 22px;
+            }
+            .navigation-tab--compact .navigation-tab__icon svg,
+            .navigation-tab .navigation-tab__icon svg {
+                width: 22px;
+                height: 22px;
+            }
+        }
+        .fade-transition {
+          opacity: 1;
+          transition: opacity 0.6s cubic-bezier(.4,0,.2,1);
+        }
+        .fade-transition.fade-out {
+          opacity: 0;
+        }
+    </style>
+</head>
+<body class="fade-transition">
+    <div class="bg-shape shape1"></div>
+    <div class="bg-shape shape2"></div>
+    <div class="bg-shape shape3"></div>
+    <header>
+        <img src="https://i.pinimg.com/originals/12/44/02/12440274c10c5f0f95b2766904b80bc3.jpg" alt="Logo" id="logo">
+        <h1>RL Boosting</h1>
+    </header>
+    <main>
+        <section class="basket-section">
+            <h2>Your Basket</h2>
+            <ul class="basket-list" id="basket-list">
+                <!-- Basket items will be injected here -->
+            </ul>
+            <div class="basket-total" id="basket-total"></div>
+            <div class="empty-basket" id="empty-basket" style="display:none;">Your basket is empty.</div>
+            <button class="checkout-btn" id="checkout-btn" onclick="alert('Checkout coming soon!')">Checkout</button>
+        </section>
+    </main>
+    <nav class="navigation-tab navigation-tab--compact" style="left:50vw;transform:translateX(-50%);">
+        <div class="navigation-tab-item" onclick="window.location.href='index.html'" style="--nav-index:0">
+            <span class="navigation-tab__icon">
+                <!-- Home Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg>
+            </span>
+        </div>
+        <div class="navigation-tab-item" onclick="window.location.href='services.html'" style="--nav-index:1">
+            <span class="navigation-tab__icon">
+                <!-- Services Icon (Tag) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+            </span>
+        </div>
+        <div class="navigation-tab-item active" style="--nav-index:2">
+            <span class="navigation-tab__icon" style="position:relative;">
+                <!-- Basket Icon (Shopping Bag) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <span id="basket-badge" style="display:none;position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;background:#f43f5e;color:#fff;border-radius:50%;font-size:0.95rem;font-weight:700;line-height:20px;text-align:center;box-shadow:0 2px 8px #f43f5e44;pointer-events:none;z-index:2;"></span>
+            </span>
+        </div>
+        <div class="navigation-tab-item" onclick="window.location.href='chat.html'" style="--nav-index:3">
+            <span class="navigation-tab__icon">
+                <!-- Glassy Chat Bubble Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="url(#glass-gradient)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="glass-gradient" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#a5b4fc"/>
+                            <stop offset="100%" stop-color="#6366f1"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="url(#glass-gradient)" />
+                </svg>
+            </span>
+        </div>
+    </nav>
+    <script>
+    // --- Basket logic using localStorage ---
+    function getBasket() {
+        try {
+            return JSON.parse(localStorage.getItem('rlbasket')) || [];
+        } catch {
+            return [];
+        }
+    }
+    function setBasket(items) {
+        localStorage.setItem('rlbasket', JSON.stringify(items));
+    }
+    function removeFromBasket(index) {
+        const items = getBasket();
+        items.splice(index, 1);
+        setBasket(items);
+        renderBasket();
+        updateBasketBadge();
+    }
+    function renderBasket() {
+        const items = getBasket();
+        const list = document.getElementById('basket-list');
+        const totalDiv = document.getElementById('basket-total');
+        const emptyDiv = document.getElementById('empty-basket');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        list.innerHTML = '';
+        let total = 0;
+        if (items.length === 0) {
+            emptyDiv.style.display = '';
+            totalDiv.textContent = '';
+            checkoutBtn.style.display = 'none';
+        } else {
+            emptyDiv.style.display = 'none';
+            checkoutBtn.style.display = '';
+            items.forEach((item, i) => {
+                total += Number(item.price) || 0;
+                const li = document.createElement('li');
+                li.innerHTML = `<span>${item.name}</span>
+                    <span>
+                        $${item.price}
+                        <button class="remove-btn" onclick="removeFromBasket(${i})" title="Remove">&times;</button>
+                    </span>`;
+                list.appendChild(li);
+            });
+            totalDiv.textContent = 'Total: $' + total.toFixed(2);
+        }
+    }
+    renderBasket();
+    </script>
+    <script>
+    document.querySelectorAll('.navigation-tab-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        // Only fade if navigating to another page
+        const href = this.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+        if (href) {
+          e.preventDefault();
+          document.body.classList.add('fade-out');
+          setTimeout(() => {
+            window.location.href = href;
+          }, 600);
+        }
+      });
+    });
+
+    // Also fade in on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.remove('fade-out');
+    });
+    </script>
+    <script>
+    function updateBasketBadge() {
+        var badge = document.getElementById('basket-badge');
+        if (!badge) return;
+        let items = [];
+        try {
+            items = JSON.parse(localStorage.getItem('rlbasket')) || [];
+        } catch {}
+        if (items.length > 0) {
+            badge.textContent = items.length;
+            badge.style.display = '';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+    // Update badge on page load and after basket changes
+    updateBasketBadge();
+    window.addEventListener('storage', updateBasketBadge);
+    window.updateBasketBadge = updateBasketBadge; // For manual calls
+
+    // Patch addToBasketAnim if it exists
+    if (typeof addToBasketAnim === "function") {
+        const orig = addToBasketAnim;
+        window.addToBasketAnim = function(...args) {
+            orig.apply(this, args);
+            setTimeout(updateBasketBadge, 100);
+        }
+    }
+    </script>
+</body>
+</html>
