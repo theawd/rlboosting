@@ -343,7 +343,7 @@
           .service-cards {
             flex-direction: column;
             gap: 1.5em;
-            align-items: stretch; /* Make all cards stretch to same width */
+            align-items: stretch;
           }
           .service-card {
             min-width: 0;
@@ -352,7 +352,17 @@
             box-sizing: border-box;
             padding: 1.5em 1em;
             margin: 0;
-            align-self: stretch; /* Ensure card fills width of parent */
+            align-self: stretch;
+            display: flex;
+            flex-direction: column;
+            justify-content: stretch;
+            height: 100%;
+          }
+          .service-card .buy-btn {
+            font-size: 1rem;
+            padding: 0.7em 1.6em;
+            margin-top: auto;
+            display: inline-block;
           }
         }
     </style>
