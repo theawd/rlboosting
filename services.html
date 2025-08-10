@@ -628,5 +628,107 @@ if (window.matchMedia("(max-width: 600px)").matches) {
   });
 }
 </script>
+<!-- Add this CSS just before </head> (after your main <style> block) -->
+<style>
+/* Mobile-first adjustments */
+@media (max-width: 600px) {
+  body {
+    font-size: 1rem;
+    padding-bottom: 80px; /* Make space for nav bar */
+  }
+
+  header {
+    margin-bottom: 1.2em;
+  }
+  #logo {
+    width: 60px;
+    margin-top: 1em;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+
+  /* Countdown widget */
+  #countdown-widget {
+    margin: 1em auto;
+    padding: 1em 0.8em;
+    font-size: 0.95rem;
+  }
+  #countdown-widget div:first-child {
+    font-size: 1.1rem;
+  }
+  #countdown-timer {
+    font-size: 1.6rem;
+  }
+
+  /* Service cards */
+  .services-section {
+    margin: 2em auto;
+    padding-bottom: 90px;
+  }
+  .service-cards {
+    flex-direction: column;
+    gap: 1.5em;
+  }
+  .service-card {
+    min-width: unset;
+    max-width: 95%;
+    padding: 1.5em 1em;
+  }
+  .service-card h3 {
+    font-size: 1.1rem;
+  }
+  .price-tag {
+    font-size: 1.1rem;
+    padding: 0.3em 0.9em;
+  }
+  .service-card .buy-btn {
+    font-size: 1rem;
+    padding: 0.7em 1.6em;
+  }
+
+  /* Overlay details view on mobile */
+  .service-details {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 999;
+    padding: 1.5em 1em;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+  .service-details.active {
+    transform: translateY(0);
+  }
+  .close-details {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #fff;
+    position: absolute;
+    top: 0.6em;
+    right: 0.8em;
+    cursor: pointer;
+  }
+
+  /* Navigation tab adjustments */
+  .navigation-tab,
+  .navigation-tab--compact {
+    width: 100%;
+    height: 60px;
+    bottom: 0;
+    left: 0;
+    transform: none;
+    border-radius: 1em 1em 0 0;
+    padding: 0 0.3em;
+  }
+  .navigation-tab-item {
+    flex: 1;
+    height: 48px;
+    width: auto;
+  }
+}
+</style>
 </body>
 </html>
