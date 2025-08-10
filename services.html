@@ -179,7 +179,199 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-6px); }
         }
-        @media (max-width: 500px) {
+        .fade-transition {
+            opacity: 1;
+            transition: opacity 0.6s cubic-bezier(.4,0,.2,1);
+        }
+        .fade-transition.fade-out {
+            opacity: 0;
+        }
+        /* Redesigned Services Section */
+        .services-section {
+            max-width: 1200px;
+            margin: 4em auto 3em auto;
+            padding: 0 1em 120px 1em;
+        }
+        .services-title {
+            text-align: center;
+            color: #6366f1;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 2.5em;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 16px #6366f144;
+        }
+        .service-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5em;
+            justify-content: center;
+            align-items: stretch;
+        }
+        .service-card {
+            max-width: 300px;
+            min-width: 220px;
+            width: 100%;
+            min-height: 370px;
+            height: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-radius: 1.2em;
+            box-shadow: 0 6px 24px rgba(99,102,241,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+            padding: 1.3em 1em 1.5em 1em;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.22s, box-shadow 0.22s;
+            border: 1.5px solid #23243a;
+        }
+        .service-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 12px 32px rgba(99,102,241,0.13), 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .service-card .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5em;
+            border-radius: 0.8em;
+            padding: 0.4em 0.6em;
+        }
+        .service-card h3 {
+            font-size: 1.1rem;
+        }
+        .price-tag {
+            font-size: 1rem;
+            padding: 0.2em 0.7em;
+        }
+        .service-card .buy-btn, .service-card a.buy-btn {
+            font-size: 0.98rem;
+            padding: 0.7em 1.2em;
+            max-width: 150px;
+        }
+        .service-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 1em 0 0 0;
+            color: #a5b4fc;
+            font-size: 1rem;
+            text-align: left;
+        }
+        .service-card ul li {
+            margin-bottom: 0.5em;
+            padding-left: 1.2em;
+            position: relative;
+        }
+        .service-card ul li::before {
+            content: "•";
+            color: #6366f1;
+            position: absolute;
+            left: 0;
+            font-size: 1.1em;
+            top: 0;
+        }
+        .service-card .buy-btn, .service-card a.buy-btn {
+            margin-top: 1.2em;
+            background: var(--accent-gradient);
+            color: #fff !important;
+            border: none;
+            border-radius: 10px;
+            padding: 0.9em 2.2em;
+            font-size: 1.08rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 12px #6366f122;
+            transition: background 0.2s, transform 0.2s;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .service-card .buy-btn:hover, .service-card a.buy-btn:hover {
+            background: linear-gradient(90deg,#4f46e5,#6366f1);
+            transform: translateY(-2px) scale(1.07);
+        }
+        .cart-anim {
+            display: inline-block;
+            vertical-align: middle;
+            animation: cartBob 1.2s infinite;
+        }
+        @keyframes cartBob {
+            0%, 100% { transform: translateY(0);}
+            50% { transform: translateY(-10px);}
+        }
+        .added-to-basket {
+            opacity: 0;
+            transform: translateY(10px) scale(0.95);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+        .added-to-basket.show {
+            display: block !important;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .services-section {
+                margin: 2em auto 2em auto;
+                padding-bottom: 100px;
+            }
+            .service-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 600px) {
+            .services-section {
+                margin: 1.2em auto 1.2em auto;
+                padding-bottom: 80px;
+            }
+            .services-title {
+                font-size: 1.5rem;
+                margin-bottom: 1.2em;
+            }
+            .service-card {
+                max-width: 98vw;
+                min-width: 0;
+                min-height: 0;
+                padding: 1em 0.5em 1em 0.5em;
+            }
+            .service-card .icon {
+                font-size: 2rem;
+                padding: 0.4em 0.6em;
+            }
+            .service-card h3 {
+                font-size: 1.05rem;
+            }
+            .price-tag {
+                font-size: 1rem;
+                padding: 0.2em 0.7em;
+            }
+            .service-card .buy-btn, .service-card a.buy-btn {
+                font-size: 0.98rem;
+                padding: 0.7em 1.2em;
+                width: 100%;
+                max-width: 180px;
+                margin-left: 0;
+                margin-right: 0;
+            }
+            .service-card ul {
+                font-size: 0.97rem;
+                margin: 0.5em 0 0.5em 0;
+            }
+            .service-card ul li {
+                margin-bottom: 0.2em;
+            }
+        }
+        /* Nav bar fix */
+        .navigation-tab,
+        .navigation-tab--compact {
+            left: 50vw !important;
+            transform: translateX(-50%) !important;
+        }
+        @media (max-width: 600px) {
             .navigation-tab,
             .navigation-tab--compact {
                 width: 98vw;
@@ -207,265 +399,6 @@
                 width: 22px;
                 height: 22px;
             }
-        }
-        .fade-transition {
-            opacity: 1;
-            transition: opacity 0.6s cubic-bezier(.4,0,.2,1);
-        }
-        .fade-transition.fade-out {
-            opacity: 0;
-        }
-        .services-section {
-            max-width: 1200px;
-            margin: 4em auto 3em auto;
-            padding: 0 1em;
-            padding-bottom: 120px; /* Add this line or increase if needed */
-        }
-        .services-title {
-            text-align: center;
-            color: #6366f1;
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 2.5em;
-            letter-spacing: -1px;
-            text-shadow: 0 2px 16px #6366f144;
-        }
-        .service-cards {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2.5em;
-            justify-content: center;
-        }
-        .service-card {
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            border-radius: 1.5em;
-            box-shadow: 0 6px 24px rgba(99,102,241,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
-            padding: 2.5em 2em;
-            min-width: 260px;
-            max-width: 340px;
-            flex: 1 1 300px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        .service-card:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 12px 32px rgba(99,102,241,0.13), 0 2px 8px rgba(0,0,0,0.07);
-        }
-        .service-card .icon {
-            font-size: 2.7rem;
-            margin-bottom: 0.7em;
-            color: #6366f1;
-        }
-        .service-card h3 {
-            color: #fff;
-            margin-bottom: 1em;
-            font-size: 1.25rem;
-            font-weight: 700;
-            text-shadow: 0 2px 16px #6366f144;
-        }
-        .price-tag {
-            display: inline-block;
-            background: linear-gradient(90deg,#6366f1,#a5b4fc);
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.3rem;
-            border-radius: 8px;
-            padding: 0.4em 1.2em;
-            margin-bottom: 1em;
-            box-shadow: 0 2px 8px #6366f122;
-            letter-spacing: 1px;
-        }
-        .service-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 1em 0 0 0;
-            color: #a5b4fc;
-            font-size: 1rem;
-        }
-        .service-card ul li {
-            margin-bottom: 0.5em;
-        }
-        .service-card .buy-btn {
-            margin-top: 1.2em;
-            background: var(--accent-gradient);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            padding: 0.9em 2.2em;
-            font-size: 1.08rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 12px #6366f122;
-            transition: background 0.2s, transform 0.2s;
-            letter-spacing: 0.5px;
-        }
-        .service-card .buy-btn:hover {
-            background: linear-gradient(90deg,#4f46e5,#6366f1);
-            transform: translateY(-2px) scale(1.07);
-        }
-        .cart-anim {
-            display: inline-block;
-            vertical-align: middle;
-            animation: cartBob 1.2s infinite;
-        }
-        @keyframes cartBob {
-            0%, 100% { transform: translateY(0);}
-            50% { transform: translateY(-10px);}
-        }
-        .added-to-basket {
-            opacity: 0;
-            transform: translateY(10px) scale(0.95);
-            transition: opacity 0.3s, transform 0.3s;
-            pointer-events: none;
-        }
-        .added-to-basket.show {
-            display: block !important;
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-        @media (max-width: 900px) {
-            .service-cards {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-        @media (max-width: 600px) {
-          .service-cards {
-            padding-bottom: 90px !important; /* You can keep this for nav bar space */
-          }
-        }
-        /* Add or update this in your <style> block for mobile */
-        @media (max-width: 600px) {
-          .service-cards {
-            flex-direction: column;
-            gap: 1.2em;
-            align-items: stretch;
-          }
-          .service-card {
-            min-width: 0;
-            max-width: 98%;
-            width: 100%;
-            box-sizing: border-box;
-            padding: 0.7em 0.7em 1em 0.7em; /* less top/bottom padding */
-            margin: 0 auto;
-            align-self: stretch;
-            display: flex;
-            flex-direction: column;
-            min-height: 270px; /* ensures enough height for all content */
-            height: auto;
-          }
-          .service-card ul {
-            margin-bottom: 0.5em;
-          }
-          .service-card .buy-btn {
-            margin-top: auto; /* pushes button to bottom */
-            font-size: 1rem;
-            padding: 0.7em 1.2em;
-            display: inline-block;
-          }
-        }
-        /* Place this CSS in your <style> block (after your main styles) */
-        @media (max-width: 600px) {
-          .service-cards {
-            gap: 1.2em;
-            padding: 0;
-          }
-          .service-card {
-            max-width: 98vw;
-            min-width: 0;
-            width: 100%;
-            margin: 0 auto;
-            border-radius: 1.2em;
-            box-shadow: 0 4px 18px #6366f122, 0 1.5px 4px rgba(0,0,0,0.04);
-            padding: 1.1em 0.7em 1.3em 0.7em;
-            background: linear-gradient(120deg, #23243a 60%, #181a20 100%);
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 1em;
-            position: relative;
-            min-height: 110px;
-            border: 1.5px solid #23243a;
-          }
-          .service-card .icon {
-            font-size: 2.2rem;
-            margin: 0 0.7em 0 0;
-            flex-shrink: 0;
-            color: #6366f1;
-            background: #23243a;
-            border-radius: 1em;
-            padding: 0.5em 0.7em;
-            box-shadow: 0 2px 8px #6366f144;
-          }
-          .service-card h3 {
-            font-size: 1.08rem;
-            margin: 0 0 0.3em 0;
-            color: #fff;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            text-align: left;
-          }
-          .service-card .price-tag {
-            font-size: 1.05rem;
-            padding: 0.2em 0.7em;
-            border-radius: 0.7em;
-            margin: 0.2em 0 0.3em 0;
-            display: inline-block;
-            background: linear-gradient(90deg,#6366f1,#a5b4fc);
-            color: #fff;
-            font-weight: 700;
-            box-shadow: 0 2px 8px #6366f122;
-          }
-          .service-card ul {
-            font-size: 0.97rem;
-            color: #a5b4fc;
-            margin: 0.2em 0 0.5em 0;
-            padding: 0 0 0 1.1em;
-            text-align: left;
-          }
-          .service-card ul li {
-            margin-bottom: 0.2em;
-            list-style: disc;
-          }
-          .service-card .buy-btn, .service-card a.buy-btn {
-            margin-top: 0.5em;
-            font-size: 0.98rem;
-            padding: 0.6em 1.2em;
-            border-radius: 0.7em;
-            font-weight: 700;
-            width: 100%;
-            max-width: 180px;
-            display: block;
-            margin-left: 0;
-            margin-right: 0;
-            background: var(--accent-gradient);
-            color: #fff !important;
-            text-align: center;
-            box-shadow: 0 2px 8px #6366f122;
-            border: none;
-          }
-          .service-card .buy-btn:hover, .service-card a.buy-btn:hover {
-            background: linear-gradient(90deg,#4f46e5,#6366f1);
-            color: #fff;
-            transform: scale(1.04);
-          }
-          /* Make the card content stack vertically on very small screens */
-          @media (max-width: 400px) {
-            .service-card {
-              flex-direction: column;
-              align-items: flex-start;
-              min-height: 0;
-              padding: 1em 0.5em 1.2em 0.5em;
-            }
-            .service-card .icon {
-              margin: 0 0 0.5em 0;
-              align-self: center;
-            }
-          }
         }
     </style>
 </head>
@@ -800,8 +733,8 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     padding-bottom: 90px;
   }
   .service-cards {
-    flex-direction: column;
-    gap: 1.5em;
+    grid-template-columns: 1fr;
+    gap: 1.2em;
   }
   .service-card {
     min-width: unset;
