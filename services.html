@@ -350,18 +350,21 @@
             max-width: 98%;
             width: 100%;
             box-sizing: border-box;
-            padding: 1em 0.7em;   /* Reduced padding */
+            padding: 0.7em 0.7em 1em 0.7em; /* less top/bottom padding */
             margin: 0 auto;
             align-self: stretch;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            min-height: 270px; /* ensures enough height for all content */
             height: auto;
           }
+          .service-card ul {
+            margin-bottom: 0.5em;
+          }
           .service-card .buy-btn {
+            margin-top: auto; /* pushes button to bottom */
             font-size: 1rem;
             padding: 0.7em 1.2em;
-            margin-top: 1em;
             display: inline-block;
           }
         }
