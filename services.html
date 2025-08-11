@@ -500,13 +500,123 @@
           .service-card { min-height: 420px; }
         }
         @media (max-width: 600px) {
-          .service-cards { gap:1.4rem; }
-          .service-card { padding:1.6rem 1.25rem 1.9rem; min-height:0; }
-          .service-card__icon-wrap { width:76px; height:76px; margin-bottom:.9rem; }
-          .service-card h3 { font-size:1.08rem; }
-          .service-card ul { font-size:.9rem; }
-          .service-card .buy-btn { width:100%; }
-        }
+          body {
+    font-size: .95rem;
+    padding-bottom: 90px;
+  }
+
+  header { margin-bottom: .9em; }
+
+  #logo { width: 54px; margin-top: .6em; }
+
+  h1 { font-size: 1.7rem; letter-spacing: -0.5px; }
+
+  .services-section {
+    margin: 1.6em auto 1.2em;
+    padding-bottom: 84px;
+  }
+
+  .services-title {
+    font-size: 1.55rem;
+    margin-bottom: 1.4em;
+  }
+
+  .service-cards {
+    gap: 1rem;
+    padding: 0;
+  }
+
+  .service-card {
+    padding: 1.05rem .95rem 1.25rem;
+    border-radius: 1.4rem;
+    min-height: 0;
+  }
+
+  .service-card__icon-wrap {
+    width: 64px;
+    height: 64px;
+    margin: .2rem 0 .7rem;
+  }
+
+  .service-card h3 {
+    font-size: 1rem;
+    margin-bottom: .55rem;
+  }
+
+  .service-card ul {
+    font-size: .8rem;
+    line-height: 1.13rem;
+  }
+
+  .service-card ul li { margin-bottom: .45rem; }
+
+  .price-tag {
+    font-size: .85rem;
+    padding: .32em .75em .38em;
+    border-radius: .6rem;
+  }
+
+  .service-card .buy-btn {
+    font-size: .82rem;
+    padding: .6em 1.25em .65em;
+    margin-top: 1rem;
+  }
+
+  #open-trial-btn { width: 100%; }
+
+  /* Countdown widget tighter */
+  #countdown-widget {
+    margin: 1em auto .8em;
+    padding: .75em .7em .85em;
+    border-radius: 1.1rem;
+  }
+  #countdown-widget div:first-child {
+    font-size: 1rem;
+    margin-bottom: .35em;
+  }
+  #countdown-timer {
+    font-size: 1.35rem;
+    letter-spacing: 1px;
+  }
+
+  /* Navigation bar compress */
+  .navigation-tab,
+  .navigation-tab--compact {
+    height: 56px;
+    padding: 0 .4em;
+  }
+  .navigation-tab-item {
+    height: 48px;
+  }
+  .navigation-tab__icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Hide large background blobs to reduce visual clutter */
+  .bg-shape.shape2,
+  .bg-shape.shape3 { display:none; }
+  .bg-shape.shape1 { opacity:.12; filter:blur(28px); }
+
+  /* Donate bubble hidden to free space */
+  .donate-fab { display:none !important; }
+
+  /* Admin modal table scroll hint size */
+  .admin-table { font-size:.58rem; }
+}
+
+/* Ultra‑narrow tweaks */
+@media (max-width: 400px) {
+  .service-card {
+    padding: .95rem .75rem 1.1rem;
+  }
+  .service-card ul { font-size: .76rem; }
+  .service-card .buy-btn { font-size: .78rem; }
+  .price-tag { font-size: .8rem; }
+}
+
+/* Prevent layout shift on very tall buttons */
+.service-card .buy-btn { line-height: 1.05; }
     </style>
 </head>
 <body class="fade-transition services-bg">
@@ -576,8 +686,8 @@ setInterval(updateCountdown, 1000);
           </ul>
 
           <div style="margin-top:.6rem;">
-  <button type="button" class="buy-btn" onclick="window.formbutton && window.formbutton('open')">
-    Claim Free Trial
+  <button id="open-trial-btn" type="button" class="buy-btn">
+    use button bottom right
   </button>
   <div style="margin-top:.8rem;font-size:.7rem;letter-spacing:.5px;color:#a5b4fc;text-align:center;">
     Opens support form to submit your Email & Epic ID.
@@ -855,13 +965,11 @@ if (window.matchMedia("(max-width: 600px)").matches) {
   .service-card h3 {
     font-size: 1.1rem;
   }
-  .price-tag {
-    font-size: 1.1rem;
-    padding: 0.3em 0.9em;
+  .service-card ul {
+    font-size: .9rem;
   }
   .service-card .buy-btn {
-    font-size: 1rem;
-    padding: 0.7em 1.6em;
+    width: 100%;
   }
 
   /* Overlay details view on mobile */
@@ -1230,13 +1338,11 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting...';
 
-    // Send to Getform
+    // Send to Formspree
     const fd = new FormData();
     fd.append('email', email);
     fd.append('epicID', epic);
-    fd.append('source', 'free_trial');
-    // optional: include timestamp
-    fd.append('submitted_at', new Date().toISOString());
+    fd.append('_subject', 'New Free Trial Signup');
 
     let ok = false;
     try{
@@ -1264,6 +1370,51 @@ if (window.matchMedia("(max-width: 600px)").matches) {
 
     submitBtn.disabled=false;
     submitBtn.textContent='Claim Free Trial';
+  });
+})();
+</script>
+<script>
+const FORM_ENDPOINT = 'https://formspree.io/f/xldlaavb';
+</script>
+<script>
+(function(){
+  const cForm = document.getElementById('contact-form');
+  if(!cForm) return;
+  const status = document.getElementById('contact-status');
+  const btn = cForm.querySelector('button[type="submit"]');
+  cForm.addEventListener('submit', async e=>{
+    e.preventDefault();
+    status.textContent='';
+    const email = (cForm.email.value||'').trim();
+    const msg = (cForm.message.value||'').trim();
+    if(!email || !msg){
+      status.textContent='Fill all fields';
+      status.style.color='#f43f5e';
+      return;
+    }
+    btn.disabled=true; const prev=btn.textContent; btn.textContent='Sending...';
+    const fd = new FormData();
+    fd.append('email', email);
+    fd.append('message', msg);
+    try{
+      const r = await fetch(FORM_ENDPOINT, {
+        method:'POST',
+        body: fd,
+        headers:{ 'Accept':'application/json' }
+      });
+      if(r.ok){
+        status.textContent='Sent';
+        status.style.color='#43e97b';
+        cForm.reset();
+      } else {
+        status.textContent='Error sending';
+        status.style.color='#f43f5e';
+      }
+    }catch{
+      status.textContent='Network error';
+      status.style.color='#f43f5e';
+    }
+    btn.disabled=false; btn.textContent=prev;
   });
 })();
 </script>
@@ -1308,5 +1459,29 @@ formbutton("create", {
   initiallyVisible: false
 });
 </script>
-</body>
-</html>
+<script>
+(function(){
+  function openWidget(){
+    if (typeof window.formbutton === 'function') {
+      try { window.formbutton('open'); } catch {}
+      return true;
+    }
+    return false;
+  }
+  document.addEventListener('click', e=>{
+    if(e.target && e.target.id === 'open-trial-btn'){
+      if(openWidget()) return;
+      // Poll until library ready (max ~3s)
+      let tries = 0;
+      const iv = setInterval(()=>{
+        if(openWidget() || ++tries > 30) clearInterval(iv);
+      },100);
+    }
+  });
+  // Optional deep link: services.html#trial
+  if(location.hash === '#trial'){
+    let tries=0;
+    const iv=setInterval(()=>{ if(openWidget() || ++tries>30) clearInterval(iv); },120);
+  }
+})();
+</script>
