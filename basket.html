@@ -301,12 +301,27 @@
 
             <button class="checkout-btn" id="checkout-btn">Checkout</button>
 
+            <!-- Updated: support multiple Stripe buttons (Quick Boost + Team Up Session + Weekend Grind) -->
             <div id="stripe-checkout-container" style="display:none;margin-top:1.5em;padding:1.2em 1em;border:1.5px solid #23243a;border-radius:1.2em;background:rgba(255,255,255,0.06);backdrop-filter:blur(10px);">
-              <stripe-buy-button
-                buy-button-id="buy_btn_1RuikkKOYFp3OflgpPv5isRa"
-                publishable-key="pk_live_51RuKtaKOYFp3OflgIOG5Av7V4ekzAHGNZqxzp0F7ZyAh9aMtXgKPpLihkHwXtg6HqxLNRoRdO3UJVBtvXv8fe4Ic00MD33p6ds">
-              </stripe-buy-button>
-              <p style="margin:0.9em 0 0;font-size:0.75rem;color:#a5b4fc;">Live mode enabled.</p>
+              <div data-product="quick boost" style="display:none;">
+                <stripe-buy-button
+                  buy-button-id="buy_btn_1RuikkKOYFp3OflgpPv5isRa"
+                  publishable-key="pk_live_51RuKtaKOYFp3OflgIOG5Av7V4ekzAHGNZqxzp0F7ZyAh9aMtXgKPpLihkHwXtg6HqxLNRoRdO3UJVBtvXv8fe4Ic00MD33p6ds">
+                </stripe-buy-button>
+              </div>
+              <div data-product="team up session" style="display:none;">
+                <stripe-buy-button
+                  buy-button-id="buy_btn_1Rujk9KOYFp3OflgMKqE4WOv"
+                  publishable-key="pk_live_51RuKtaKOYFp3OflgIOG5Av7V4ekzAHGNZqxzp0F7ZyAh9aMtXgKPpLihkHwXtg6HqxLNRoRdO3UJVBtvXv8fe4Ic00MD33p6ds">
+                </stripe-buy-button>
+              </div>
+              <div data-product="weekend grind" style="display:none;">
+                <stripe-buy-button
+                  buy-button-id="buy_btn_1RujotKOYFp3OflgqJ7L4tsx"
+                  publishable-key="pk_live_51RuKtaKOYFp3OflgIOG5Av7V4ekzAHGNZqxzp0F7ZyAh9aMtXgKPpLihkHwXtg6HqxLNRoRdO3UJVBtvXv8fe4Ic00MD33p6ds">
+                </stripe-buy-button>
+              </div>
+              <p id="stripe-note" style="margin:0.9em 0 0;font-size:0.75rem;color:#a5b4fc;display:none;">Live mode enabled.</p>
             </div>
         </section>
     </main>
@@ -451,14 +466,21 @@
   const btn = document.getElementById('checkout-btn');
   const container = document.getElementById('stripe-checkout-container');
   if(!btn||!container) return;
+
   btn.addEventListener('click', () => {
     const items = (()=>{try{return JSON.parse(localStorage.getItem('rlbasket'))||[]}catch{return[]}})();
-    const hasQuickBoost = items.some(i => (i.name||'').toLowerCase()==='quick boost');
-    if(!hasQuickBoost){
-      alert('Checkout currently only available for Quick Boost.');
+    const names = items.map(i => (i.name||'').toLowerCase());
+    const supported = ['quick boost','team up session','weekend grind'].filter(n => names.includes(n));
+    if(supported.length===0){
+      alert('Checkout available for Quick Boost, Team Up Session, or Weekend Grind.');
       return;
     }
     container.style.display='block';
+    container.querySelectorAll('[data-product]').forEach(el=>{
+      const prod = el.getAttribute('data-product');
+      el.style.display = supported.includes(prod) ? '' : 'none';
+    });
+    document.getElementById('stripe-note').style.display='';
     container.scrollIntoView({behavior:'smooth',block:'center'});
   });
 })();
