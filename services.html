@@ -1135,10 +1135,8 @@ if (window.matchMedia("(max-width: 600px)").matches) {
 </style>
 <script>
 (function(){
-  // Always enable admin modal (was dev-only). To disable globally, wrap logic in a condition.
   const PASS = 'kylaandartom123';
   const modal = document.getElementById('admin-modal');
-  const panel = modal?.querySelector('.admin-modal__panel');
   const pwInput = document.getElementById('adminPw');
   const pwMsg = document.getElementById('adminPwMsg');
   const pwSubmit = document.getElementById('adminPwSubmit');
@@ -1150,12 +1148,13 @@ if (window.matchMedia("(max-width: 600px)").matches) {
   const refreshBtn = document.getElementById('refreshData');
   const copyBtn = document.getElementById('copyCsv');
   const logoutBtn = document.getElementById('adminLogout');
+
   let awaitingP = false;
   let unlocked = false;
+  let seq = '';
+  let seqTimer = null;
 
-  function readLocal(){
-    try{return JSON.parse(localStorage.getItem('rl_free_trials'))||[]}catch{return[]}
-  }
+  function readLocal(){ try{return JSON.parse(localStorage.getItem('rl_free_trials'))||[]}catch{return[]} }
   async function fetchServer(){
     try{
       const r = await fetch('/api/free-trial',{cache:'no-store'});
@@ -1164,27 +1163,25 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     }catch{return []}
   }
   function dedup(list){
-    const seenE = new Set(), seenEpic = new Set(), out=[];
+    const seenE=new Set(),seenEpic=new Set(),out=[];
     for(const r of list){
       const e=(r.email||'').toLowerCase(), ep=(r.epic||'').toLowerCase();
-      if(seenE.has(e) || seenEpic.has(ep)) continue;
+      if(seenE.has(e)||seenEpic.has(ep)) continue;
       seenE.add(e); seenEpic.add(ep); out.push(r);
     }
-    return out.sort((a,b)=>b.ts - a.ts);
+    return out.sort((a,b)=>b.ts-a.ts);
   }
-  function formatTime(ts){
-    try{return new Date(ts).toLocaleString()}catch{return ''}
-  }
+  function formatTime(ts){ try{return new Date(ts).toLocaleString()}catch{return ''} }
   function showModal(resetPw){
-    modal.hidden=false;
+    modal.hidden = false;
     if(resetPw){
       unlocked=false;
       stepPw.hidden=false;
       stepData.hidden=true;
       pwInput.value='';
       pwMsg.textContent='';
-      setTimeout(()=>pwInput.focus(),30);
-    }else{
+      setTimeout(()=>pwInput.focus(),40);
+    } else {
       stepPw.hidden=true;
       stepData.hidden=false;
     }
@@ -1196,20 +1193,20 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     return merged;
   }
 
-  pwSubmit?.addEventListener('click',()=>{
+  function unlockIfPasswordOK(){
     if(pwInput.value===PASS){
       unlocked=true;
       stepPw.hidden=true;
       stepData.hidden=false;
       loadData();
-    }else{
+    } else {
       pwMsg.textContent='Incorrect password';
       pwInput.focus();
     }
-  });
-  pwInput?.addEventListener('keydown',e=>{
-    if(e.key==='Enter') pwSubmit.click();
-  });
+  }
+
+  pwSubmit?.addEventListener('click', unlockIfPasswordOK);
+  pwInput?.addEventListener('keydown',e=>{ if(e.key==='Enter') unlockIfPasswordOK(); });
   refreshBtn?.addEventListener('click',()=>loadData());
   copyBtn?.addEventListener('click',async()=>{
     const data = await loadData();
@@ -1221,28 +1218,49 @@ if (window.matchMedia("(max-width: 600px)").matches) {
       setTimeout(()=>copyBtn.textContent='Copy CSV',1200);
     });
   });
-  logoutBtn?.addEventListener('click',()=>{
-    unlocked=false;
-    showModal(true);
-  });
-  closeBtns.forEach(b=>b?.addEventListener('click',()=>{modal.hidden=true;}));
-  document.addEventListener('keydown',e=>{
-    if(e.key==='Escape' && !modal.hidden){
-      modal.hidden=true;
-    }
-  });
+  logoutBtn?.addEventListener('click',()=>{ unlocked=false; showModal(true); });
+  closeBtns.forEach(b=>b?.addEventListener('click',()=>{ modal.hidden=true; }));
 
-  // Hotkey: Shift+F then P (within 1.5s) for everyone
   document.addEventListener('keydown',e=>{
+    if(e.key==='Escape' && !modal.hidden) modal.hidden=true;
+
+    // Original sequence: Shift+F then P within 1.5s
     if(e.key==='F' && e.shiftKey){
       awaitingP=true;
       setTimeout(()=>awaitingP=false,1500);
-    }else if(awaitingP && (e.key==='p' || e.key==='P')){
+    } else if(awaitingP && (e.key==='p'||e.key==='P')){
       awaitingP=false;
       showModal(!unlocked);
       if(unlocked) loadData();
     }
+
+    // Alternate combo: Ctrl+Alt+A
+    if(e.key==='a' && (e.ctrlKey||e.metaKey) && e.altKey){
+      showModal(!unlocked);
+      if(unlocked) loadData();
+    }
+
+    // Quick typed sequence "fp" (case-insensitive) within 1s
+    if(/^[a-z]$/i.test(e.key)){
+      seq += e.key.toLowerCase();
+      clearTimeout(seqTimer);
+      seqTimer = setTimeout(()=>{ seq=''; },1000);
+      if(seq.endsWith('fp')){
+        seq='';
+        showModal(!unlocked);
+        if(unlocked) loadData();
+      }
+    }
   });
+
+  // URL hash trigger (#admin)
+  if(location.hash === '#admin'){
+    showModal(true);
+  }
+
+  // Expose manual open in console
+  window.openAdminModal = ()=>showModal(!unlocked);
+
 })();
 </script>
 <script>
