@@ -295,12 +295,19 @@
     <main>
         <section class="basket-section">
             <h2>Your Basket</h2>
-            <ul class="basket-list" id="basket-list">
-                <!-- Basket items will be injected here -->
-            </ul>
+            <ul class="basket-list" id="basket-list"></ul>
             <div class="basket-total" id="basket-total"></div>
             <div class="empty-basket" id="empty-basket" style="display:none;">Your basket is empty.</div>
-            <button class="checkout-btn" id="checkout-btn" onclick="alert('Checkout coming soon!')">Checkout</button>
+
+            <button class="checkout-btn" id="checkout-btn">Checkout</button>
+
+            <div id="stripe-checkout-container" style="display:none;margin-top:1.5em;padding:1.2em 1em;border:1.5px solid #23243a;border-radius:1.2em;background:rgba(255,255,255,0.06);backdrop-filter:blur(10px);">
+              <stripe-buy-button
+                buy-button-id="buy_btn_1RuikkKOYFp3OflgpPv5isRa"
+                publishable-key="pk_live_51RuKtaKOYFp3OflgIOG5Av7V4ekzAHGNZqxzp0F7ZyAh9aMtXgKPpLihkHwXtg6HqxLNRoRdO3UJVBtvXv8fe4Ic00MD33p6ds">
+              </stripe-buy-button>
+              <p style="margin:0.9em 0 0;font-size:0.75rem;color:#a5b4fc;">Live mode enabled.</p>
+            </div>
         </section>
     </main>
     <nav class="navigation-tab navigation-tab--compact" style="left:50vw;transform:translateX(-50%);">
@@ -436,5 +443,26 @@
         }
     }
     </script>
+    <script>
+    /* KEEP existing basket functions above (getBasket, setBasket, removeFromBasket, renderBasket, updateBasketBadge) */
+
+    /* New checkout handler with conditional Stripe buy button for Quick Boost */
+    (function(){
+  const btn = document.getElementById('checkout-btn');
+  const container = document.getElementById('stripe-checkout-container');
+  if(!btn||!container) return;
+  btn.addEventListener('click', () => {
+    const items = (()=>{try{return JSON.parse(localStorage.getItem('rlbasket'))||[]}catch{return[]}})();
+    const hasQuickBoost = items.some(i => (i.name||'').toLowerCase()==='quick boost');
+    if(!hasQuickBoost){
+      alert('Checkout currently only available for Quick Boost.');
+      return;
+    }
+    container.style.display='block';
+    container.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+})();
+    </script>
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
 </body>
 </html>
