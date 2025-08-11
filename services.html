@@ -202,203 +202,310 @@
             text-shadow: 0 2px 16px #6366f144;
         }
         .service-cards {
+            --col-min: 280px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5em;
-            justify-content: center;
+            grid-template-columns: repeat(auto-fit, minmax(var(--col-min), 1fr));
+            gap: 2.2rem;
             align-items: stretch;
+            padding: 0 .5rem;
         }
         .service-card {
-            max-width: 300px;
-            min-width: 220px;
-            width: 100%;
-            min-height: 370px;
-            height: 100%;
-            margin: 0 auto;
+            position: relative;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            border-radius: 1.2em;
-            box-shadow: 0 6px 24px rgba(99,102,241,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
-            padding: 1.3em 1em 1.5em 1em;
-            position: relative;
+            background: linear-gradient(160deg, rgba(255,255,255,0.11) 0%, rgba(255,255,255,0.04) 60%, rgba(99,102,241,0.08) 100%);
+            border-radius: 1.9rem;
+            padding: 1.9rem 1.6rem 2.1rem;
             overflow: hidden;
-            transition: transform 0.22s, box-shadow 0.22s;
-            border: 1.5px solid #23243a;
+            isolation: isolate;
+            min-height: 430px;
+            box-shadow:
+                0 2px 4px -1px rgba(0,0,0,0.4),
+                0 8px 28px -4px rgba(0,0,0,0.55),
+                0 0 0 1px rgba(255,255,255,0.05),
+                0 0 0 1px inset rgba(255,255,255,0.06);
+            backdrop-filter: blur(22px) saturate(140%);
+            transition: transform .55s cubic-bezier(.19,1,.22,1), box-shadow .55s, background .6s;
         }
+
+        .service-card::before,
+        .service-card::after {
+          content:"";
+          position:absolute;
+          inset:0;
+          border-radius: inherit;
+          pointer-events:none;
+        }
+
+        .service-card::before {
+          background:
+            radial-gradient(140% 100% at 15% 5%, rgba(255,255,255,0.28) 0%, transparent 55%),
+            radial-gradient(120% 90% at 85% 110%, rgba(99,102,241,0.35) 0%, transparent 65%);
+          mix-blend-mode: overlay;
+          opacity:.55;
+          transition: opacity .6s;
+        }
+
+        .service-card::after {
+          background:
+            linear-gradient(110deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.05) 35%, rgba(99,102,241,0.18) 60%, rgba(165,180,252,0.28) 100%);
+          mask: linear-gradient(#000 40%, transparent 85%);
+          opacity:.12;
+          transform: translateY(0);
+          transition: opacity .6s, transform .9s cubic-bezier(.19,1,.22,1);
+        }
+
         .service-card:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 12px 32px rgba(99,102,241,0.13), 0 2px 8px rgba(0,0,0,0.07);
+          transform: translateY(-10px);
+          box-shadow:
+            0 4px 14px -2px rgba(0,0,0,0.55),
+            0 20px 46px -10px rgba(0,0,0,0.7),
+            0 0 0 1px rgba(255,255,255,0.08),
+            0 0 24px -4px #6366f1aa;
         }
+
+        .service-card:hover::before { opacity:.75; }
+        .service-card:hover::after {
+          opacity:.2;
+          transform: translateY(-12%);
+        }
+
+        .service-card__glow-ring {
+          position:absolute;
+          inset:-1px;
+          border-radius: inherit;
+          padding:1px;
+          background:
+            linear-gradient(120deg,#6366f1,#8b5cf6,#38bdf8,#6366f1);
+          -webkit-mask:
+            linear-gradient(#000 0 0) content-box,
+            linear-gradient(#000 0 0);
+          -webkit-mask-composite: xor;
+                  mask-composite: exclude;
+          animation: ringShift 9s linear infinite;
+          opacity:.55;
+          pointer-events:none;
+        }
+        @keyframes ringShift {
+          0% { filter:hue-rotate(0deg); }
+          100% { filter:hue-rotate(360deg); }
+        }
+
+        .service-card--featured .service-card__glow-ring {
+          background:
+            linear-gradient(120deg,#43e97b,#38f9d7,#4ade80,#43e97b);
+          animation: ringShift 6s linear infinite;
+          opacity:.9;
+        }
+
+        .service-card__badge {
+          position:absolute;
+          top:.9rem;
+          right:1rem;
+          background: linear-gradient(135deg,#6366f1,#a5b4fc);
+          color:#fff;
+          font-size:.65rem;
+          letter-spacing:.12em;
+          font-weight:700;
+          padding:.45em .8em .4em;
+          border-radius: 1rem;
+          box-shadow:0 4px 14px -2px #6366f188, 0 0 0 1px rgba(255,255,255,0.15) inset;
+          text-transform:uppercase;
+          z-index:2;
+        }
+        .service-card--featured .service-card__badge {
+          background:linear-gradient(135deg,#43e97b,#38f9d7);
+          color:#082d21;
+          box-shadow:0 4px 14px -2px #38f9d766, 0 0 0 1px rgba(0,0,0,0.25) inset;
+        }
+
+        .service-card__icon-wrap {
+          position:relative;
+          width:88px;
+          height:88px;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          border-radius: 24px;
+          margin: .2rem 0 1.1rem;
+          background: linear-gradient(160deg,#23263a,#14151c);
+          box-shadow:
+            0 4px 18px -4px rgba(0,0,0,0.65),
+            0 0 0 1px rgba(255,255,255,0.06) inset;
+          overflow:hidden;
+        }
+
+        .service-card__icon-wrap::before {
+          content:"";
+          position:absolute;
+          inset:0;
+          background:
+            radial-gradient(circle at 30% 25%, rgba(255,255,255,0.28), transparent 60%),
+            radial-gradient(circle at 80% 110%, rgba(99,102,241,0.35), transparent 70%);
+          mix-blend-mode:screen;
+          opacity:.55;
+          transition:opacity .6s;
+        }
+        .service-card:hover .service-card__icon-wrap::before { opacity:.85; }
+
         .service-card .icon {
-            font-size: 2rem;
-            margin-bottom: 0.5em;
-            border-radius: 0.8em;
-            padding: 0.4em 0.6em;
+          font-size:2.65rem;
+          line-height:1;
+          filter: drop-shadow(0 4px 14px #6366f1aa);
         }
+
+        .service-card--featured .icon {
+          filter: drop-shadow(0 4px 14px #38f9d777);
+        }
+
         .service-card h3 {
-            font-size: 1.1rem;
+          margin:0 0 .75rem;
+          font-size:1.18rem;
+          font-weight:700;
+          letter-spacing:-.5px;
+          color:#fff;
+          text-shadow:0 2px 14px #0008;
         }
+
+        .service-card--featured h3 {
+          color:#43e97b;
+          text-shadow:0 2px 14px #43e97b33;
+        }
+
+        .service-card__price {
+          display:flex;
+          align-items:center;
+          gap:.6rem;
+          margin:0 0 1.1rem;
+        }
+
         .price-tag {
-            font-size: 1rem;
-            padding: 0.2em 0.7em;
+          background: linear-gradient(100deg,#6366f1,#8b5cf6);
+          color:#fff;
+          padding:.45em 1.05em .5em;
+          font-size:.95rem;
+          font-weight:700;
+          letter-spacing:.5px;
+          border-radius:.8rem;
+          box-shadow:0 4px 14px -3px #6366f1aa,0 0 0 1px rgba(255,255,255,0.15) inset;
         }
-        .service-card .buy-btn, .service-card a.buy-btn {
-            font-size: 0.98rem;
-            padding: 0.7em 1.2em;
-            max-width: 150px;
+
+        .service-card--featured .price-tag {
+          background: linear-gradient(100deg,#43e97b,#38f9d7);
+          color:#082d21;
+          box-shadow:0 4px 14px -3px #38f9d788,0 0 0 1px rgba(0,0,0,0.3) inset;
         }
+
         .service-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 1em 0 0 0;
-            color: #a5b4fc;
-            font-size: 1rem;
-            text-align: left;
+          margin:0 0 auto;
+          padding:0;
+          list-style:none;
+          width:100%;
+          font-size:.93rem;
+          line-height:1.35rem;
         }
+
         .service-card ul li {
-            margin-bottom: 0.5em;
-            padding-left: 1.2em;
-            position: relative;
+          position:relative;
+          padding-left:1.35rem;
+          margin:0 0 .55rem;
+          color:#cdd2e9;
+          font-weight:500;
+          letter-spacing:.2px;
         }
+
         .service-card ul li::before {
-            content: "•";
-            color: #6366f1;
-            position: absolute;
-            left: 0;
-            font-size: 1.1em;
-            top: 0;
+          content:"";
+          position:absolute;
+          left:0;
+          top:.32rem;
+          width:.75rem;
+          height:.75rem;
+          border-radius:50%;
+          background: radial-gradient(circle at 30% 30%, #fff, #a5b4fc 60%);
+          box-shadow:0 0 0 3px rgba(99,102,241,0.25);
+          opacity:.9;
         }
-        .service-card .buy-btn, .service-card a.buy-btn {
-            margin-top: 1.2em;
-            background: var(--accent-gradient);
-            color: #fff !important;
-            border: none;
-            border-radius: 10px;
-            padding: 0.9em 2.2em;
-            font-size: 1.08rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 12px #6366f122;
-            transition: background 0.2s, transform 0.2s;
-            letter-spacing: 0.5px;
-            text-decoration: none;
-            display: inline-block;
+        .service-card--featured ul li::before {
+          background: radial-gradient(circle at 30% 30%, #fff, #38f9d7 60%);
+          box-shadow:0 0 0 3px rgba(56,249,215,0.35);
         }
-        .service-card .buy-btn:hover, .service-card a.buy-btn:hover {
-            background: linear-gradient(90deg,#4f46e5,#6366f1);
-            transform: translateY(-2px) scale(1.07);
+
+        .service-card .buy-btn,
+        .service-card a.buy-btn {
+          margin-top:1.4rem;
+          align-self:center;
+          background:linear-gradient(120deg,#6366f1 0%,#8b5cf6 50%,#6366f1 100%);
+          background-size:180% 100%;
+          color:#fff !important;
+          font-size:.95rem;
+          font-weight:700;
+          padding:.85em 2.1em .9em;
+          border:none;
+          border-radius: 1.05rem;
+          letter-spacing:.6px;
+          box-shadow:0 6px 22px -6px #6366f1dd, 0 0 0 1px rgba(255,255,255,0.15) inset;
+          cursor:pointer;
+          position:relative;
+          overflow:hidden;
+          transition: background-position .65s cubic-bezier(.19,1,.22,1), transform .55s cubic-bezier(.19,1,.22,1), box-shadow .55s;
         }
-        .cart-anim {
-            display: inline-block;
-            vertical-align: middle;
-            animation: cartBob 1.2s infinite;
+
+        .service-card .buy-btn::before {
+          content:"";
+          position:absolute;
+          inset:0;
+          background:
+            linear-gradient(100deg,rgba(255,255,255,.35),rgba(255,255,255,0) 40%),
+            linear-gradient(120deg,rgba(255,255,255,.25),rgba(255,255,255,0) 60%);
+          mix-blend-mode:overlay;
+          opacity:.25;
+          transition:opacity .6s;
         }
-        @keyframes cartBob {
-            0%, 100% { transform: translateY(0);}
-            50% { transform: translateY(-10px);}
+        .service-card .buy-btn:hover {
+          background-position:100% 0;
+          transform:translateY(-4px);
+          box-shadow:0 10px 34px -10px #6366f1dd,0 0 0 1px rgba(255,255,255,0.2) inset;
         }
+        .service-card .buy-btn:hover::before { opacity:.45; }
+
+        .service-card--featured .buy-btn {
+          background:linear-gradient(120deg,#43e97b,#38f9d7,#43e97b);
+          background-size:180% 100%;
+          color:#072d24 !important;
+          box-shadow:0 6px 22px -6px #38f9d7cc, 0 0 0 1px rgba(0,0,0,0.25) inset;
+        }
+        .service-card--featured .buy-btn:hover {
+          box-shadow:0 10px 34px -10px #38f9d7cc, 0 0 0 1px rgba(0,0,0,0.35) inset;
+        }
+
+        /* Added-to-basket state keep */
         .added-to-basket {
-            opacity: 0;
-            transform: translateY(10px) scale(0.95);
-            transition: opacity 0.3s, transform 0.3s;
-            pointer-events: none;
+          margin-top:1.2rem;
+          background:rgba(99,102,241,0.12);
+          padding:.85rem 1.1rem;
+          border-radius:1rem;
+          font-size:.85rem;
+          display:flex;
+          align-items:center;
+          gap:.7rem;
+          box-shadow:0 0 0 1px rgba(255,255,255,0.08) inset;
         }
-        .added-to-basket.show {
-            display: block !important;
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
+        .service-card--featured .added-to-basket {
+          background:rgba(56,249,215,0.14);
         }
-        /* Responsive Design */
+
+        /* Responsive fine-tune */
         @media (max-width: 900px) {
-            .services-section {
-                margin: 2em auto 2em auto;
-                padding-bottom: 100px;
-            }
-            .service-cards {
-                grid-template-columns: 1fr 1fr;
-            }
+          .service-card { min-height: 420px; }
         }
         @media (max-width: 600px) {
-            .services-section {
-                margin: 1.2em auto 1.2em auto;
-                padding-bottom: 80px;
-            }
-            .services-title {
-                font-size: 1.5rem;
-                margin-bottom: 1.2em;
-            }
-            .service-card {
-                max-width: 98vw;
-                min-width: 0;
-                min-height: 0;
-                padding: 1em 0.5em 1em 0.5em;
-            }
-            .service-card .icon {
-                font-size: 2rem;
-                padding: 0.4em 0.6em;
-            }
-            .service-card h3 {
-                font-size: 1.05rem;
-            }
-            .price-tag {
-                font-size: 1rem;
-                padding: 0.2em 0.7em;
-            }
-            .service-card .buy-btn, .service-card a.buy-btn {
-                font-size: 0.98rem;
-                padding: 0.7em 1.2em;
-                width: 100%;
-                max-width: 180px;
-                margin-left: 0;
-                margin-right: 0;
-            }
-            .service-card ul {
-                font-size: 0.97rem;
-                margin: 0.5em 0 0.5em 0;
-            }
-            .service-card ul li {
-                margin-bottom: 0.2em;
-            }
-        }
-        /* Nav bar fix */
-        .navigation-tab,
-        .navigation-tab--compact {
-            left: 50vw !important;
-            transform: translateX(-50%) !important;
-        }
-        @media (max-width: 600px) {
-            .navigation-tab,
-            .navigation-tab--compact {
-                width: 98vw;
-                min-width: 0;
-                left: 1vw;
-                transform: none;
-                padding: 0 2px;
-                height: 60px;
-                bottom: 12px;
-            }
-            .navigation-tab--compact .navigation-tab-item,
-            .navigation-tab .navigation-tab-item {
-                width: 48px;
-                min-width: 48px;
-                height: 48px;
-                padding: 0;
-            }
-            .navigation-tab--compact .navigation-tab__icon,
-            .navigation-tab .navigation-tab__icon {
-                height: 22px;
-                width: 22px;
-            }
-            .navigation-tab--compact .navigation-tab__icon svg,
-            .navigation-tab .navigation-tab__icon svg {
-                width: 22px;
-                height: 22px;
-            }
+          .service-cards { gap:1.4rem; }
+          .service-card { padding:1.6rem 1.25rem 1.9rem; min-height:0; }
+          .service-card__icon-wrap { width:76px; height:76px; margin-bottom:.9rem; }
+          .service-card h3 { font-size:1.08rem; }
+          .service-card ul { font-size:.9rem; }
+          .service-card .buy-btn { width:100%; }
         }
     </style>
 </head>
@@ -452,55 +559,57 @@ setInterval(updateCountdown, 1000);
       <div class="services-title">Boosting Packages</div>
       <div class="service-cards">
         <!-- Free Trial Card -->
-        <div class="service-card" style="border:2.5px solid #6366f1; box-shadow:0 0 0 3px #6366f144;">
-          <div class="icon" style="color:#43e97b;">🎁</div>
-          <h3 style="color:#43e97b;">Free Trial</h3>
-          <div class="price-tag" style="background:linear-gradient(90deg,#43e97b,#38f9d7);color:#222;">FREE</div>
+        <div class="service-card service-card--featured">
+          <span class="service-card__glow-ring"></span>
+          <span class="service-card__badge">Free</span>
+          <div class="service-card__icon-wrap">
+            <div class="icon">🎁</div>
+          </div>
+          <h3>Free Trial</h3>
+          <div class="service-card__price">
+            <span class="price-tag">FREE</span>
+          </div>
           <ul>
-            <li>3 ranked games with our grand champ players</li>
-            <li>No payment or card needed</li>
-            <li>Experience our service risk-free</li>
+            <li>3 ranked games with grand champs</li>
+            <li>No payment required</li>
+            <li>Risk‑free preview</li>
           </ul>
-          <a href="https://discord.gg/wvCRx3NqNg" target="_blank" class="buy-btn" style="background:linear-gradient(90deg,#43e97b,#38f9d7);color:#222;font-weight:800;display:inline-block;text-decoration:none;">
-            Join Discord to Claim
-          </a>
-          <div class="added-to-basket" style="display:none; margin-top:1em;">
+          <a href="https://discord.gg/wvCRx3NqNg" target="_blank" class="buy-btn">Join Discord</a>
+          <div class="added-to-basket" style="display:none;">
             <span class="cart-anim">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#43e97b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="9" cy="21" r="1.5"/>
-                <circle cx="19" cy="21" r="1.5"/>
-                <path d="M2.5 4H5l2.68 13.39A2 2 0 0 0 9.62 19h7.76a2 2 0 0 0 1.94-1.61L21.5 7H6"/>
-              </svg>
+              <!-- keep your svg if needed -->
             </span>
-            <span style="color:#43e97b; font-weight:600; margin-left:0.7em;">Join Discord for Free Trial</span>
+            <span style="color:#43e97b;font-weight:600;">Join Discord for Free Trial</span>
           </div>
         </div>
-        <!-- Existing Paid Packages Below -->
+
         <div class="service-card">
-          <div class="icon">⚡</div>
+          <span class="service-card__glow-ring"></span>
+          <span class="service-card__badge">Popular</span>
+          <div class="service-card__icon-wrap">
+            <div class="icon">⚡</div>
+          </div>
           <h3>Quick Boost</h3>
-          <div class="price-tag">€3.00</div>
+          <div class="service-card__price">
+            <span class="price-tag">€3.99</span>
+          </div>
           <ul>
             <li>1 hour boosting</li>
             <li>Fast queue</li>
             <li>Progress updates</li>
           </ul>
-          <button class="buy-btn" onclick="addToBasketAnim(this, 'Quick Boost', 3.00)">Buy Now</button>
-          <div class="added-to-basket" style="display:none; margin-top:1em;">
+          <button class="buy-btn" onclick="addToBasketAnim(this, 'Quick Boost', 3.99)">Buy Now</button>
+          <div class="added-to-basket" style="display:none;">
             <span class="cart-anim">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="9" cy="21" r="1.5"/>
-                <circle cx="19" cy="21" r="1.5"/>
-                <path d="M2.5 4H5l2.68 13.39A2 2 0 0 0 9.62 19h7.76a2 2 0 0 0 1.94-1.61L21.5 7H6"/>
-              </svg>
+              <!-- svg -->
             </span>
-            <span style="color:#6366f1; font-weight:600; margin-left:0.7em;">Added to basket</span>
+            <span style="color:#6366f1;font-weight:600;">Added to basket</span>
           </div>
         </div>
         <div class="service-card">
           <div class="icon">🤝</div>
           <h3>Team Up Session</h3>
-          <div class="price-tag">€7.00</div>
+          <div class="price-tag">€7.99</div>
           <ul>
             <li>3 hours with Grand Champ staff</li>
             <li>Find teammates or let us boost</li>
@@ -521,7 +630,7 @@ setInterval(updateCountdown, 1000);
         <div class="service-card">
           <div class="icon">🔥</div>
           <h3>Weekend Grind</h3>
-          <div class="price-tag">€12.00</div>
+          <div class="price-tag">€12.99</div>
           <ul>
             <li>6 hours of Grand Champ tm8</li>
             <li>Best value</li>
@@ -796,5 +905,128 @@ if (window.matchMedia("(max-width: 600px)").matches) {
   }
 }
 </style>
+<!-- --- Donate Floating Bubble --- -->
+<style>
+.donate-fab {
+  position: fixed;
+  right: 26px;
+  bottom: 118px; /* clears the round nav (70px high + 28px gap + buffer) */
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  padding: .85rem 1.15rem .85rem .95rem;
+  background: linear-gradient(140deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 60%, rgba(99,102,241,0.20) 100%);
+  border-radius: 2.2rem;
+  box-shadow: 0 6px 26px -8px #000c, 0 0 0 1px rgba(255,255,255,0.12), 0 0 0 1px inset rgba(255,255,255,0.08);
+  backdrop-filter: blur(18px) saturate(160%);
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: .92rem;
+  letter-spacing: .4px;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform .55s cubic-bezier(.19,1,.22,1), box-shadow .55s, background .6s;
+}
+.donate-fab::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 22% 28%, rgba(255,255,255,0.35), transparent 60%),
+    radial-gradient(circle at 85% 120%, rgba(99,102,241,0.55), transparent 70%);
+  mix-blend-mode: overlay;
+  opacity:.55;
+  transition: opacity .6s;
+  pointer-events:none;
+}
+.donate-fab::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,#6366f1,#8b5cf6,#38bdf8,#6366f1);
+  opacity:.55;
+  mask:linear-gradient(#000 0 0);
+  mix-blend-mode:color-dodge;
+  animation: donateRing 8s linear infinite;
+  pointer-events:none;
+}
+@keyframes donateRing {
+  0% { filter:hue-rotate(0deg); }
+  100% { filter:hue-rotate(360deg); }
+}
+.donate-fab:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 38px -12px #6366f1cc, 0 0 0 1px rgba(255,255,255,0.18), 0 0 22px -6px #6366f199;
+}
+.donate-fab:hover::before { opacity:.8; }
+
+.donate-fab__icon {
+  font-size:1.35rem;
+  line-height:1;
+  filter: drop-shadow(0 4px 14px #6366f1aa);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.donate-fab__label {
+  position:relative;
+  z-index:2;
+  white-space:nowrap;
+  background: linear-gradient(100deg,#a5b4fc,#fff);
+  -webkit-background-clip:text;
+  color: transparent;
+  font-weight:700;
+  letter-spacing:.6px;
+  text-shadow:0 2px 14px #0008;
+}
+
+.donate-fab:focus {
+  outline: 2px solid #a5b4fc;
+  outline-offset: 3px;
+}
+
+/* Mobile adjustment (nav is full width bottom) */
+@media (max-width: 600px) {
+  .donate-fab {
+    right: 16px;
+    bottom: 80px; /* nav height ~60 + gap */
+    padding: .75rem 1rem .75rem .85rem;
+    font-size: .88rem;
+  }
+  .donate-fab__icon { font-size:1.2rem; }
+}
+</style>
+    <!-- Donate Bubble -->
+    <a href="donations.html" class="donate-fab" aria-label="Donate to RL Boosting">
+      <span class="donate-fab__icon">💖</span>
+      <span class="donate-fab__label">Donate</span>
+    </a>
+    <script>
+    function addToBasketAnim(btn, name, price) {
+        // Save to basket
+        let items = [];
+        try {
+            items = JSON.parse(localStorage.getItem('rlbasket')) || [];
+        } catch {}
+        items.push({name, price});
+        localStorage.setItem('rlbasket', JSON.stringify(items));
+
+        // Animation: replace button with animated cart and message
+        const addedDiv = btn.parentElement.querySelector('.added-to-basket');
+        btn.style.display = 'none';
+        addedDiv.style.display = 'block';
+        setTimeout(() => {
+            addedDiv.classList.add('show');
+        }, 10);
+
+        // No redirect to basket!
+        // User stays on the page and can click basket icon when ready
+        if (window.updateBasketBadge) setTimeout(window.updateBasketBadge, 100);
+    }
+    </script>
 </body>
 </html>
