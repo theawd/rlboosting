@@ -150,6 +150,21 @@ h1{margin:1.2rem 0 0;font-size:2.4rem;font-weight:800;letter-spacing:-1px;color:
   outline:2px solid #a5b4fc;
   outline-offset:4px;
 }
+/* Remove pill look and add big left-aligned supporter name */
+.donor-name {
+  margin: .4rem 0 0;
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  background: linear-gradient(120deg,#a5b4fc,#fff);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 0 4px 28px #6366f144;
+}
+@media (max-width:600px){
+  .donor-name { font-size: 1.9rem; }
+}
 @media (max-width:900px){.tier{min-height:420px}}
 @media (max-width:600px){
   h1{font-size:2rem;}
@@ -214,10 +229,9 @@ h1{margin:1.2rem 0 0;font-size:2.4rem;font-weight:800;letter-spacing:-1px;color:
     <div class="support-wall" id="support-wall">
       <h3>Support Wall</h3>
       <div class="donor-tags" id="donor-tags">
-        <!-- Placeholder donors -->
-        <span class="featured">You?</span>
+        <span>filipipi stinky</span>
       </div>
-      <div class="footer-note">Recent supporters appear here (manual update or integrate via backend later).</div>
+      <div class="footer-note">Recent supporters appear here.</div>
     </div>
   </div>
 
