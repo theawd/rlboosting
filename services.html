@@ -507,73 +507,6 @@
           .service-card ul { font-size:.9rem; }
           .service-card .buy-btn { width:100%; }
         }
-        .trial-form{
-  margin-top:1.1rem;
-  display:flex;
-  flex-direction:column;
-  gap:.85rem;
-  text-align:left;
-  background:rgba(255,255,255,0.05);
-  padding:1.1rem 1rem 1.2rem;
-  border-radius:1.2rem;
-  box-shadow:0 0 0 1px rgba(255,255,255,0.06) inset;
-}
-.trial-form label{
-  font-size:.75rem;
-  font-weight:600;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:#a5b4fc;
-  display:flex;
-  flex-direction:column;
-  gap:.45rem;
-}
-.trial-form input{
-  background:#23243a;
-  border:1.5px solid #2d2f3a;
-  border-radius:.8rem;
-  padding:.75rem .85rem;
-  font:600 .9rem 'Inter',sans-serif;
-  color:#fff;
-  outline:none;
-  transition:border-color .25s,box-shadow .25s;
-}
-.trial-form input:focus{
-  border-color:#6366f1;
-  box-shadow:0 0 0 3px #6366f133;
-}
-.trial-form .buy-btn{
-  width:100%;
-  margin-top:.2rem;
-  font-size:.9rem;
-  padding:.9rem 1.2rem;
-}
-.form-status{
-  min-height:1.1rem;
-  font-size:.75rem;
-  font-weight:600;
-  letter-spacing:.4px;
-  margin-top:.4rem;
-  color:#a5b4fc;
-}
-.form-status.ok{color:#43e97b;}
-.form-status.err{color:#f43f5e;}
-/* Hidden dev viewer */
-#trial-viewer{
-  position:fixed;inset:0;z-index:5000;display:none;
-  background:rgba(0,0,0,.65);backdrop-filter:blur(8px);
-  align-items:center;justify-content:center;padding:2rem;
-}
-#trial-viewer.open{display:flex;}
-#trial-viewer .panel{
-  background:#1f222b;border:1.5px solid #2d2f3a;
-  max-width:520px;width:100%;max-height:70vh;overflow:auto;
-  border-radius:1.5rem;padding:1.4rem 1.3rem 1.6rem;
-  font-size:.85rem;line-height:1.3;color:#fff;
-}
-#trial-viewer h4{margin:0 0 .9rem;font-size:1rem;letter-spacing:.5px;color:#6366f1;}
-#trial-viewer pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:.7rem;background:#23243a;padding:.9rem 1rem;border-radius:.9rem;}
-#trial-viewer button{margin-top:.9rem;background:#6366f1;color:#fff;border:none;padding:.55rem 1.1rem;border-radius:.7rem;font-weight:600;cursor:pointer;}
     </style>
 </head>
 <body class="fade-transition services-bg">
@@ -642,19 +575,14 @@ setInterval(updateCountdown, 1000);
             <li>Risk‑free preview</li>
           </ul>
 
-          <form id="free-trial-form" class="trial-form" action="https://getform.io/f/ajjregwa" method="POST" novalidate>
-  <!-- Honeypot (spam trap) -->
-  <input type="hidden" name="_gotcha">
-  <input type="hidden" name="source" value="free_trial">
-  <label>Email
-    <input type="email" name="email" placeholder="you@example.com" required>
-  </label>
-  <label>Epic Games Username
-    <input type="text" name="epicID" placeholder="EpicID" minlength="3" required>
-  </label>
-  <button type="submit" class="buy-btn">Claim Free Trial</button>
-  <div class="form-status" id="trial-status" aria-live="polite"></div>
-</form>
+          <div style="margin-top:.6rem;">
+  <button type="button" class="buy-btn" onclick="window.formbutton && window.formbutton('open')">
+    Claim Free Trial
+  </button>
+  <div style="margin-top:.8rem;font-size:.7rem;letter-spacing:.5px;color:#a5b4fc;text-align:center;">
+    Opens support form to submit your Email & Epic ID.
+  </div>
+</div>
         </div>
 
         <div class="service-card">
@@ -1339,3 +1267,46 @@ if (window.matchMedia("(max-width: 600px)").matches) {
   });
 })();
 </script>
+<script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
+<script>
+window.formbutton = window.formbutton || function(){(formbutton.q=formbutton.q||[]).push(arguments)};
+formbutton("create", {
+  action: "https://formspree.io/f/xblkqqen",
+  title: "Free Trial / Support",
+  description: "Enter details to request your free trial or ask a question.",
+  fields: [
+    {
+      type: "email",
+      label: "Email",
+      name: "email",
+      required: true,
+      placeholder: "you@example.com"
+    },
+    {
+      type: "text",
+      label: "Epic ID",
+      name: "epicID",
+      required: true,
+      placeholder: "Your Epic username"
+    },
+    {
+      type: "textarea",
+      label: "Message (optional)",
+      name: "message",
+      placeholder: "Anything else you'd like to add"
+    },
+    { type: "hidden", name: "source", value: "free_trial" },
+    { type: "submit", value: "Send Request" }
+  ],
+  styles: {
+    button: {
+      backgroundColor: "#6366f1",
+      borderRadius: "14px"
+    },
+    title: { backgroundColor: "#6366f1" }
+  },
+  initiallyVisible: false
+});
+</script>
+</body>
+</html>
