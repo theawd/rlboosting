@@ -722,6 +722,25 @@ setInterval(updateCountdown, 1000);
         </div>
       </div>
     </section>
+    <section style="max-width:760px;margin:-1rem auto 4rem auto;padding:2.2rem 1.4rem 2.6rem;background:rgba(255,255,255,0.05);border:1px solid #2d2f3a;border-radius:1.6rem;backdrop-filter:blur(14px);box-shadow:0 8px 32px -12px #000a,0 0 0 1px rgba(255,255,255,0.06) inset;">
+  <h2 style="margin:0 0 1.2rem;font:800 1.55rem 'Inter',sans-serif;letter-spacing:-.5px;color:#a5b4fc;text-shadow:0 2px 12px #6366f155;">Contact / Message</h2>
+  <form id="contact-form" action="https://formspree.io/f/xldlaavb" method="POST" class="contact-form" novalidate>
+    <div style="display:flex;flex-direction:column;gap:.9rem;">
+      <label style="display:flex;flex-direction:column;gap:.45rem;font:600 .75rem 'Inter',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#a5b4fc;">
+        Your Email
+        <input type="email" name="email" required
+               style="background:#23243a;border:1.5px solid #2d2f3a;border-radius:.8rem;padding:.75rem .85rem;font:600 .9rem 'Inter',sans-serif;color:#fff;outline:none;transition:border-color .25s,box-shadow .25s;">
+      </label>
+      <label style="display:flex;flex-direction:column;gap:.45rem;font:600 .75rem 'Inter',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#a5b4fc;">
+        Message
+        <textarea name="message" required rows="4"
+                  style="resize:vertical;background:#23243a;border:1.5px solid #2d2f3a;border-radius:.8rem;padding:.75rem .85rem;font:600 .9rem 'Inter',sans-serif;color:#fff;outline:none;transition:border-color .25s,box-shadow .25s;"></textarea>
+      </label>
+      <button type="submit" class="buy-btn" style="margin-top:.2rem;">Send</button>
+      <div id="contact-status" style="min-height:1.1rem;font:600 .7rem 'Inter',sans-serif;letter-spacing:.4px;color:#a5b4fc;"></div>
+    </div>
+  </form>
+</section>
     <nav class="navigation-tab navigation-tab--compact" style="left:50vw;transform:translateX(-50%);">
         <div class="navigation-tab-item{active_home}" onclick="window.location.href='index.html'" style="--nav-index:0">
             <span class="navigation-tab__icon">
@@ -1332,6 +1351,51 @@ if (window.matchMedia("(max-width: 600px)").matches) {
 
     submitBtn.disabled=false;
     submitBtn.textContent='Claim Free Trial';
+  });
+})();
+</script>
+<script>
+const FORM_ENDPOINT = 'https://formspree.io/f/xldlaavb';
+</script>
+<script>
+(function(){
+  const cForm = document.getElementById('contact-form');
+  if(!cForm) return;
+  const status = document.getElementById('contact-status');
+  const btn = cForm.querySelector('button[type="submit"]');
+  cForm.addEventListener('submit', async e=>{
+    e.preventDefault();
+    status.textContent='';
+    const email = (cForm.email.value||'').trim();
+    const msg = (cForm.message.value||'').trim();
+    if(!email || !msg){
+      status.textContent='Fill all fields';
+      status.style.color='#f43f5e';
+      return;
+    }
+    btn.disabled=true; const prev=btn.textContent; btn.textContent='Sending...';
+    const fd = new FormData();
+    fd.append('email', email);
+    fd.append('message', msg);
+    try{
+      const r = await fetch(FORM_ENDPOINT, {
+        method:'POST',
+        body: fd,
+        headers:{ 'Accept':'application/json' }
+      });
+      if(r.ok){
+        status.textContent='Sent';
+        status.style.color='#43e97b';
+        cForm.reset();
+      } else {
+        status.textContent='Error sending';
+        status.style.color='#f43f5e';
+      }
+    }catch{
+      status.textContent='Network error';
+      status.style.color='#f43f5e';
+    }
+    btn.disabled=false; btn.textContent=prev;
   });
 })();
 </script>
