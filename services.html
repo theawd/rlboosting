@@ -1079,7 +1079,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     <!-- REPLACE the existing dev viewer overlay + its script with the following: -->
 <div id="admin-modal" class="admin-modal" hidden>
   <div class="admin-modal__panel" data-step="password">
-    <h3 id="adminTitle">Protected Viewer</h3>
+    <h3 id="adminTitle">Admin Panel</h3>
     <div class="admin-step admin-step--pw">
       <p style="margin:.2rem 0 1rem;color:#a5b4fc;font-size:.8rem;">Enter password to view trial signups.</p>
       <label style="display:flex;flex-direction:column;gap:.4rem;font-size:.7rem;letter-spacing:.12em;font-weight:600;text-transform:uppercase;color:#a5b4fc;">
@@ -1115,6 +1115,13 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     </div>
   </div>
 </div>
+<button id="openAdmin"
+  style="position:fixed;bottom:100px;left:14px;z-index:7100;
+         background:#6366f1;color:#fff;border:none;padding:.55rem .9rem;
+         font:600 .65rem 'Inter',sans-serif;letter-spacing:.5px;
+         border-radius:.55rem;cursor:pointer;box-shadow:0 4px 14px -4px #000a;">
+  Admin
+</button>
 <style>
 .admin-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:7000;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);}
 .admin-modal[hidden]{display:none;}
@@ -1137,6 +1144,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
 (function(){
   const PASS = 'kylaandartom123';
   const modal = document.getElementById('admin-modal');
+  const openBtn = document.getElementById('openAdmin');
   const pwInput = document.getElementById('adminPw');
   const pwMsg = document.getElementById('adminPwMsg');
   const pwSubmit = document.getElementById('adminPwSubmit');
@@ -1149,10 +1157,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
   const copyBtn = document.getElementById('copyCsv');
   const logoutBtn = document.getElementById('adminLogout');
 
-  let awaitingP = false;
   let unlocked = false;
-  let seq = '';
-  let seqTimer = null;
 
   function readLocal(){ try{return JSON.parse(localStorage.getItem('rl_free_trials'))||[]}catch{return[]} }
   async function fetchServer(){
@@ -1163,7 +1168,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     }catch{return []}
   }
   function dedup(list){
-    const seenE=new Set(),seenEpic=new Set(),out=[];
+    const seenE=new Set(), seenEpic=new Set(), out=[];
     for(const r of list){
       const e=(r.email||'').toLowerCase(), ep=(r.epic||'').toLowerCase();
       if(seenE.has(e)||seenEpic.has(ep)) continue;
@@ -1173,7 +1178,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
   }
   function formatTime(ts){ try{return new Date(ts).toLocaleString()}catch{return ''} }
   function showModal(resetPw){
-    modal.hidden = false;
+    modal.hidden=false;
     if(resetPw){
       unlocked=false;
       stepPw.hidden=false;
@@ -1192,75 +1197,56 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     countsEl.textContent = `Total: ${merged.length}`;
     return merged;
   }
-
-  function unlockIfPasswordOK(){
+  function tryUnlock(){
     if(pwInput.value===PASS){
       unlocked=true;
       stepPw.hidden=true;
       stepData.hidden=false;
       loadData();
-    } else {
+    }else{
       pwMsg.textContent='Incorrect password';
       pwInput.focus();
     }
   }
 
-  pwSubmit?.addEventListener('click', unlockIfPasswordOK);
-  pwInput?.addEventListener('keydown',e=>{ if(e.key==='Enter') unlockIfPasswordOK(); });
-  refreshBtn?.addEventListener('click',()=>loadData());
-  copyBtn?.addEventListener('click',async()=>{
+  // Button always visible
+  openBtn.addEventListener('click', ()=>{
+    if(unlocked){
+      showModal(false);
+      loadData();
+    } else {
+      showModal(true);
+    }
+  });
+
+  pwSubmit?.addEventListener('click', tryUnlock);
+  pwInput?.addEventListener('keydown', e=>{ if(e.key==='Enter') tryUnlock(); });
+  refreshBtn?.addEventListener('click', ()=>loadData());
+  copyBtn?.addEventListener('click', async ()=>{
     const data = await loadData();
-    const csv = ['index,email,epic,ts_iso'].concat(
-      data.map((r,i)=>`${i+1},"${r.email}","${r.epic}",${new Date(r.ts).toISOString()}`)
-    ).join('\n');
+    const csv = ['index,email,epic,ts_iso']
+      .concat(data.map((r,i)=>`${i+1},"${r.email}","${r.epic}",${new Date(r.ts).toISOString()}`))
+      .join('\n');
     navigator.clipboard.writeText(csv).then(()=>{
       copyBtn.textContent='Copied';
       setTimeout(()=>copyBtn.textContent='Copy CSV',1200);
     });
   });
-  logoutBtn?.addEventListener('click',()=>{ unlocked=false; showModal(true); });
-  closeBtns.forEach(b=>b?.addEventListener('click',()=>{ modal.hidden=true; }));
+  logoutBtn?.addEventListener('click', ()=>{ unlocked=false; showModal(true); });
+  closeBtns.forEach(b=>b?.addEventListener('click', ()=>{ modal.hidden=true; }));
 
-  document.addEventListener('keydown',e=>{
+  document.addEventListener('keydown', e=>{
     if(e.key==='Escape' && !modal.hidden) modal.hidden=true;
-
-    // Original sequence: Shift+F then P within 1.5s
-    if(e.key==='F' && e.shiftKey){
-      awaitingP=true;
-      setTimeout(()=>awaitingP=false,1500);
-    } else if(awaitingP && (e.key==='p'||e.key==='P')){
-      awaitingP=false;
-      showModal(!unlocked);
-      if(unlocked) loadData();
-    }
-
-    // Alternate combo: Ctrl+Alt+A
-    if(e.key==='a' && (e.ctrlKey||e.metaKey) && e.altKey){
-      showModal(!unlocked);
-      if(unlocked) loadData();
-    }
-
-    // Quick typed sequence "fp" (case-insensitive) within 1s
-    if(/^[a-z]$/i.test(e.key)){
-      seq += e.key.toLowerCase();
-      clearTimeout(seqTimer);
-      seqTimer = setTimeout(()=>{ seq=''; },1000);
-      if(seq.endsWith('fp')){
-        seq='';
-        showModal(!unlocked);
-        if(unlocked) loadData();
-      }
+    // Simple extra hotkey: F9
+    if(e.key==='F9'){
+      if(unlocked){ showModal(false); loadData(); } else showModal(true);
     }
   });
 
-  // URL hash trigger (#admin)
-  if(location.hash === '#admin'){
-    showModal(true);
-  }
+  // Optional: auto-open password step once after publish (remove if not wanted)
+  // showModal(true);
 
-  // Expose manual open in console
-  window.openAdminModal = ()=>showModal(!unlocked);
-
+  window.openAdminModal = ()=>{ if(unlocked){ showModal(false); loadData(); } else showModal(true); };
 })();
 </script>
 <script>
