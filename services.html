@@ -1135,9 +1135,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
 </style>
 <script>
 (function(){
-  const IS_DEV = ['localhost','127.0.0.1',''].includes(location.hostname) || localStorage.getItem('devMode')==='1';
-  if(!IS_DEV) return; // hide entirely for non-dev unless devMode flag set
-  // NOTE: client-side password can be viewed in source; for real security move check server-side.
+  // Always enable admin modal (was dev-only). To disable globally, wrap logic in a condition.
   const PASS = 'kylaandartom123';
   const modal = document.getElementById('admin-modal');
   const panel = modal?.querySelector('.admin-modal__panel');
@@ -1234,7 +1232,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     }
   });
 
-  // Combo: Shift+F then (within 1.5s) press P
+  // Hotkey: Shift+F then P (within 1.5s) for everyone
   document.addEventListener('keydown',e=>{
     if(e.key==='F' && e.shiftKey){
       awaitingP=true;
