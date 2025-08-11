@@ -507,6 +507,73 @@
           .service-card ul { font-size:.9rem; }
           .service-card .buy-btn { width:100%; }
         }
+        .trial-form{
+  margin-top:1.1rem;
+  display:flex;
+  flex-direction:column;
+  gap:.85rem;
+  text-align:left;
+  background:rgba(255,255,255,0.05);
+  padding:1.1rem 1rem 1.2rem;
+  border-radius:1.2rem;
+  box-shadow:0 0 0 1px rgba(255,255,255,0.06) inset;
+}
+.trial-form label{
+  font-size:.75rem;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#a5b4fc;
+  display:flex;
+  flex-direction:column;
+  gap:.45rem;
+}
+.trial-form input{
+  background:#23243a;
+  border:1.5px solid #2d2f3a;
+  border-radius:.8rem;
+  padding:.75rem .85rem;
+  font:600 .9rem 'Inter',sans-serif;
+  color:#fff;
+  outline:none;
+  transition:border-color .25s,box-shadow .25s;
+}
+.trial-form input:focus{
+  border-color:#6366f1;
+  box-shadow:0 0 0 3px #6366f133;
+}
+.trial-form .buy-btn{
+  width:100%;
+  margin-top:.2rem;
+  font-size:.9rem;
+  padding:.9rem 1.2rem;
+}
+.form-status{
+  min-height:1.1rem;
+  font-size:.75rem;
+  font-weight:600;
+  letter-spacing:.4px;
+  margin-top:.4rem;
+  color:#a5b4fc;
+}
+.form-status.ok{color:#43e97b;}
+.form-status.err{color:#f43f5e;}
+/* Hidden dev viewer */
+#trial-viewer{
+  position:fixed;inset:0;z-index:5000;display:none;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:2rem;
+}
+#trial-viewer.open{display:flex;}
+#trial-viewer .panel{
+  background:#1f222b;border:1.5px solid #2d2f3a;
+  max-width:520px;width:100%;max-height:70vh;overflow:auto;
+  border-radius:1.5rem;padding:1.4rem 1.3rem 1.6rem;
+  font-size:.85rem;line-height:1.3;color:#fff;
+}
+#trial-viewer h4{margin:0 0 .9rem;font-size:1rem;letter-spacing:.5px;color:#6366f1;}
+#trial-viewer pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:.7rem;background:#23243a;padding:.9rem 1rem;border-radius:.9rem;}
+#trial-viewer button{margin-top:.9rem;background:#6366f1;color:#fff;border:none;padding:.55rem 1.1rem;border-radius:.7rem;font-weight:600;cursor:pointer;}
     </style>
 </head>
 <body class="fade-transition services-bg">
@@ -574,13 +641,17 @@ setInterval(updateCountdown, 1000);
             <li>No payment required</li>
             <li>Risk‑free preview</li>
           </ul>
-          <a href="https://discord.gg/wvCRx3NqNg" target="_blank" class="buy-btn">Join Discord</a>
-          <div class="added-to-basket" style="display:none;">
-            <span class="cart-anim">
-              <!-- keep your svg if needed -->
-            </span>
-            <span style="color:#43e97b;font-weight:600;">Join Discord for Free Trial</span>
-          </div>
+
+          <form id="free-trial-form" class="trial-form" novalidate>
+    <label>Email
+      <input type="email" name="email" placeholder="you@example.com" required>
+    </label>
+    <label>Epic Games Username
+      <input type="text" name="epic" placeholder="EpicID" minlength="3" required>
+    </label>
+    <button type="submit" class="buy-btn">Claim Free Trial</button>
+    <div class="form-status" id="trial-status" aria-live="polite"></div>
+  </form>
         </div>
 
         <div class="service-card">
@@ -1028,5 +1099,150 @@ if (window.matchMedia("(max-width: 600px)").matches) {
         if (window.updateBasketBadge) setTimeout(window.updateBasketBadge, 100);
     }
     </script>
+    <!-- Dev viewer overlay -->
+<div id="trial-viewer" aria-hidden="true">
+  <div class="panel">
+    <h4>Local Trial Signups (Dev)</h4>
+    <pre id="trial-json"></pre>
+    <button type="button" id="close-trial-viewer">Close</button>
+  </div>
+</div>
+<script>
+(function(){
+  const form = document.getElementById('free-trial-form');
+  const statusEl = document.getElementById('trial-status');
+  const dupModal = document.getElementById('dup-modal');
+  const dupMsgEl = document.getElementById('dupMsg');
+  const dupClose = document.getElementById('dupClose');
+  const viewer = document.getElementById('trial-viewer');
+  const viewerPre = document.getElementById('trial-json');
+  if(!form) return;
+
+  const IS_DEV = ['localhost','127.0.0.1',''].includes(location.hostname) || localStorage.getItem('devMode')==='1';
+
+  function readLocal(){
+    try{return JSON.parse(localStorage.getItem('rl_free_trials'))||[]}catch{return[]}
+  }
+  function writeLocal(list){
+    localStorage.setItem('rl_free_trials',JSON.stringify(list));
+  }
+  function showDuplicate(msg){
+    if(!dupModal) return;
+    dupMsgEl.textContent = msg || 'Already submitted with that email or Epic.';
+    dupModal.hidden = false;
+    dupClose?.focus();
+  }
+  dupClose?.addEventListener('click',()=>dupModal.hidden=true);
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape' && dupModal && !dupModal.hidden) dupModal.hidden=true;
+  });
+
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    statusEl.className='form-status';
+    const email = form.email.value.trim();
+    const epic = form.epic.value.trim();
+    const emailL = email.toLowerCase();
+    const epicL = epic.toLowerCase();
+    if(!email || !epic){
+      statusEl.textContent='Fill all fields.'; statusEl.classList.add('err'); return;
+    }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+      statusEl.textContent='Invalid email.'; statusEl.classList.add('err'); return;
+    }
+    const local = readLocal();
+    if(local.some(r => r.email?.toLowerCase()===emailL || r.epic?.toLowerCase()===epicL)){
+      showDuplicate('That email or Epic is already registered for the trial.');
+      statusEl.textContent='Duplicate blocked.'; statusEl.classList.add('err');
+      return;
+    }
+    statusEl.textContent='Submitting...';
+    const record = {email, epic, ts: Date.now()};
+    let serverAccepted = false;
+    try{
+      const res = await fetch('/api/free-trial',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(record)
+      });
+      if(res.status===409){
+        showDuplicate('Already registered on server.');
+        statusEl.textContent='Duplicate.'; statusEl.classList.add('err');
+        return;
+      }
+      if(res.ok) serverAccepted = true;
+    }catch(_e){}
+    // Store locally regardless (or only on success if you prefer)
+    if(serverAccepted || true){
+      local.push(record);
+      writeLocal(local);
+    }
+    statusEl.textContent='Received. Check your email soon.';
+    statusEl.classList.add('ok');
+    form.reset();
+  });
+
+  // Dev viewer (Shift+F) only if dev
+  if(IS_DEV && viewer && viewerPre){
+    document.addEventListener('keydown',e=>{
+      if(e.shiftKey && e.key==='F'){
+        viewerPre.textContent = JSON.stringify(readLocal(),null,2);
+        viewer.classList.add('open');
+      }
+      if(e.key==='Escape' && viewer.classList.contains('open')){
+        viewer.classList.remove('open');
+      }
+    });
+    document.getElementById('close-trial-viewer')?.addEventListener('click',()=>viewer.classList.remove('open'));
+  }
+})();
+</script>
+<!-- ...existing CSS... -->
+.dup-modal{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:6000;
+  font-family:inherit;
+}
+.dup-modal[hidden]{display:none;}
+.dup-modal__panel{
+  background:#1f222b;
+  border:1.5px solid #2d2f3a;
+  max-width:360px;width:90%;
+  padding:1.4rem 1.3rem 1.5rem;
+  border-radius:1.3rem;
+  text-align:center;
+  box-shadow:0 8px 32px -8px #000a;
+}
+.dup-modal__panel h3{
+  margin:.2rem 0 .8rem;
+  font-size:1.05rem;
+  color:#fff;
+  letter-spacing:.5px;
+}
+.dup-modal__panel p{
+  margin:0 0 1rem;
+  font-size:.85rem;
+  color:#a5b4fc;
+  line-height:1.3;
+}
+.dup-modal__panel button{
+  background:#6366f1;
+  color:#fff;
+  font-weight:600;
+  border:none;
+  padding:.65rem 1.2rem;
+  border-radius:.7rem;
+  cursor:pointer;
+  font-size:.85rem;
+}
+</style>
+<!-- ...inside <body> before closing tag add: -->
+<div id="dup-modal" class="dup-modal" role="alertdialog" aria-modal="true" aria-labelledby="dupTitle" aria-describedby="dupMsg" hidden>
+  <div class="dup-modal__panel">
+    <h3 id="dupTitle">Already Used</h3>
+    <p id="dupMsg">This email or Epic username was already registered.</p>
+    <button type="button" id="dupClose">OK</button>
+  </div>
+</div>
 </body>
 </html>
