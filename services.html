@@ -617,6 +617,20 @@
 
 /* Prevent layout shift on very tall buttons */
 .service-card .buy-btn { line-height: 1.05; }
+
+/* Restore donate button on mobile and keep clear of bottom nav */
+@media (max-width: 600px) {
+  .donate-fab {
+    display: flex !important;
+    right: 14px;
+    bottom: 74px; /* nav ~60px high + small gap */
+    padding: .65rem .85rem .65rem .75rem;
+    font-size: .82rem;
+  }
+  .donate-fab__icon {
+    font-size: 1.05rem;
+  }
+}
     </style>
 </head>
 <body class="fade-transition services-bg">
