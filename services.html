@@ -1071,178 +1071,271 @@ if (window.matchMedia("(max-width: 600px)").matches) {
   .donate-fab__icon { font-size:1.2rem; }
 }
 </style>
-    <!-- Donate Bubble -->
-    <a href="donations.html" class="donate-fab" aria-label="Donate to RL Boosting">
+<!-- Donate Bubble -->
+<a href="donations.html" class="donate-fab" aria-label="Donate to RL Boosting">
       <span class="donate-fab__icon">💖</span>
       <span class="donate-fab__label">Donate</span>
     </a>
-    <script>
-    function addToBasketAnim(btn, name, price) {
-        // Save to basket
-        let items = [];
-        try {
-            items = JSON.parse(localStorage.getItem('rlbasket')) || [];
-        } catch {}
-        items.push({name, price});
-        localStorage.setItem('rlbasket', JSON.stringify(items));
-
-        // Animation: replace button with animated cart and message
-        const addedDiv = btn.parentElement.querySelector('.added-to-basket');
-        btn.style.display = 'none';
-        addedDiv.style.display = 'block';
-        setTimeout(() => {
-            addedDiv.classList.add('show');
-        }, 10);
-
-        // No redirect to basket!
-        // User stays on the page and can click basket icon when ready
-        if (window.updateBasketBadge) setTimeout(window.updateBasketBadge, 100);
-    }
-    </script>
-    <!-- Dev viewer overlay -->
-<div id="trial-viewer" aria-hidden="true">
-  <div class="panel">
-    <h4>Local Trial Signups (Dev)</h4>
-    <pre id="trial-json"></pre>
-    <button type="button" id="close-trial-viewer">Close</button>
+    <!-- REPLACE the existing dev viewer overlay + its script with the following: -->
+<div id="admin-modal" class="admin-modal" hidden>
+  <div class="admin-modal__panel" data-step="password">
+    <h3 id="adminTitle">Protected Viewer</h3>
+    <div class="admin-step admin-step--pw">
+      <p style="margin:.2rem 0 1rem;color:#a5b4fc;font-size:.8rem;">Enter password to view trial signups.</p>
+      <label style="display:flex;flex-direction:column;gap:.4rem;font-size:.7rem;letter-spacing:.12em;font-weight:600;text-transform:uppercase;color:#a5b4fc;">
+        Password
+        <input id="adminPw" type="password" autocomplete="off" style="background:#23243a;border:1.5px solid #2d2f3a;border-radius:.65rem;padding:.6rem .75rem;color:#fff;font:600 .8rem 'Inter',sans-serif;outline:none;">
+      </label>
+      <div style="display:flex;gap:.6rem;margin-top:.9rem;">
+        <button id="adminPwSubmit" class="am-btn">Unlock</button>
+        <button id="adminClose" class="am-btn am-btn--ghost">Cancel</button>
+      </div>
+      <div id="adminPwMsg" style="min-height:1rem;margin-top:.6rem;font-size:.67rem;font-weight:600;letter-spacing:.5px;color:#f43f5e;"></div>
+    </div>
+    <div class="admin-step admin-step--data" hidden>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin:0 0 .7rem;">
+        <h4 style="margin:0;font-size:.9rem;letter-spacing:.5px;color:#6366f1;">Trial Signups</h4>
+        <div style="display:flex;gap:.4rem;">
+          <button id="copyCsv" class="am-btn am-btn--mini">Copy CSV</button>
+          <button id="refreshData" class="am-btn am-btn--mini">↻</button>
+          <button id="adminClose2" class="am-btn am-btn--mini am-btn--ghost">✕</button>
+        </div>
+      </div>
+      <div id="adminCounts" style="font-size:.65rem;color:#a5b4fc;margin:0 0 .5rem;"></div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>#</th><th>Email</th><th>Epic</th><th>Time</th></tr></thead>
+          <tbody id="adminRows"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:.6rem;display:flex;justify-content:space-between;align-items:center;gap:.6rem;">
+        <small style="color:#555b70;font-size:.55rem;">Local + server merged (dedup). Esc to close.</small>
+        <button id="adminLogout" class="am-btn am-btn--mini am-btn--ghost">Lock</button>
+      </div>
+    </div>
   </div>
 </div>
+<style>
+.admin-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:7000;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);}
+.admin-modal[hidden]{display:none;}
+.admin-modal__panel{background:#1f222b;border:1.5px solid #2d2f3a;width:min(760px,92vw);max-height:86vh;overflow:hidden;border-radius:1.2rem;padding:1.2rem 1.15rem 1.3rem;font-family:'Inter',sans-serif;box-shadow:0 10px 42px -12px #000a;}
+.admin-modal__panel h3{margin:.2rem 0 .8rem;font-size:1.05rem;color:#fff;letter-spacing:.5px;}
+.am-btn{background:#6366f1;color:#fff;border:none;padding:.55rem 1.05rem;border-radius:.6rem;cursor:pointer;font:600 .7rem 'Inter',sans-serif;letter-spacing:.6px;display:inline-flex;align-items:center;gap:.3rem;}
+.am-btn--ghost{background:#23243a;color:#a5b4fc;}
+.am-btn--mini{padding:.45rem .6rem;font-size:.6rem;}
+.am-btn:focus{outline:2px solid #818cf8;outline-offset:2px;}
+.admin-table-wrap{overflow:auto;background:#181b23;border:1px solid #2d2f3a;border-radius:.8rem;max-height:52vh;}
+.admin-table{border-collapse:collapse;width:100%;font-size:.62rem;min-width:540px;}
+.admin-table thead{background:#232633;position:sticky;top:0;}
+.admin-table th, .admin-table td{padding:.45rem .55rem;text-align:left;border-bottom:1px solid #262a35;}
+.admin-table th{font-weight:600;letter-spacing:.5px;color:#a5b4fc;font-size:.55rem;}
+.admin-table tbody tr:hover{background:#232a3a;}
+.admin-step{animation:fadeIn .35s;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+</style>
 <script>
 (function(){
-  const form = document.getElementById('free-trial-form');
-  const statusEl = document.getElementById('trial-status');
-  const dupModal = document.getElementById('dup-modal');
-  const dupMsgEl = document.getElementById('dupMsg');
-  const dupClose = document.getElementById('dupClose');
-  const viewer = document.getElementById('trial-viewer');
-  const viewerPre = document.getElementById('trial-json');
-  if(!form) return;
-
   const IS_DEV = ['localhost','127.0.0.1',''].includes(location.hostname) || localStorage.getItem('devMode')==='1';
+  if(!IS_DEV) return; // hide entirely for non-dev unless devMode flag set
+  // NOTE: client-side password can be viewed in source; for real security move check server-side.
+  const PASS = 'kylaandartom123';
+  const modal = document.getElementById('admin-modal');
+  const panel = modal?.querySelector('.admin-modal__panel');
+  const pwInput = document.getElementById('adminPw');
+  const pwMsg = document.getElementById('adminPwMsg');
+  const pwSubmit = document.getElementById('adminPwSubmit');
+  const closeBtns = [document.getElementById('adminClose'), document.getElementById('adminClose2')];
+  const stepPw = modal.querySelector('.admin-step--pw');
+  const stepData = modal.querySelector('.admin-step--data');
+  const rowsEl = document.getElementById('adminRows');
+  const countsEl = document.getElementById('adminCounts');
+  const refreshBtn = document.getElementById('refreshData');
+  const copyBtn = document.getElementById('copyCsv');
+  const logoutBtn = document.getElementById('adminLogout');
+  let awaitingP = false;
+  let unlocked = false;
 
   function readLocal(){
     try{return JSON.parse(localStorage.getItem('rl_free_trials'))||[]}catch{return[]}
   }
-  function writeLocal(list){
-    localStorage.setItem('rl_free_trials',JSON.stringify(list));
+  async function fetchServer(){
+    try{
+      const r = await fetch('/api/free-trial',{cache:'no-store'});
+      if(!r.ok) return [];
+      return await r.json();
+    }catch{return []}
   }
-  function showDuplicate(msg){
-    if(!dupModal) return;
-    dupMsgEl.textContent = msg || 'Already submitted with that email or Epic.';
-    dupModal.hidden = false;
-    dupClose?.focus();
+  function dedup(list){
+    const seenE = new Set(), seenEpic = new Set(), out=[];
+    for(const r of list){
+      const e=(r.email||'').toLowerCase(), ep=(r.epic||'').toLowerCase();
+      if(seenE.has(e) || seenEpic.has(ep)) continue;
+      seenE.add(e); seenEpic.add(ep); out.push(r);
+    }
+    return out.sort((a,b)=>b.ts - a.ts);
   }
-  dupClose?.addEventListener('click',()=>dupModal.hidden=true);
-  document.addEventListener('keydown',e=>{
-    if(e.key==='Escape' && dupModal && !dupModal.hidden) dupModal.hidden=true;
+  function formatTime(ts){
+    try{return new Date(ts).toLocaleString()}catch{return ''}
+  }
+  function showModal(resetPw){
+    modal.hidden=false;
+    if(resetPw){
+      unlocked=false;
+      stepPw.hidden=false;
+      stepData.hidden=true;
+      pwInput.value='';
+      pwMsg.textContent='';
+      setTimeout(()=>pwInput.focus(),30);
+    }else{
+      stepPw.hidden=true;
+      stepData.hidden=false;
+    }
+  }
+  async function loadData(){
+    const merged = dedup([...readLocal(), ...(await fetchServer())]);
+    rowsEl.innerHTML = merged.map((r,i)=>`<tr><td>${i+1}</td><td>${r.email||''}</td><td>${r.epic||''}</td><td>${formatTime(r.ts)}</td></tr>`).join('');
+    countsEl.textContent = `Total: ${merged.length}`;
+    return merged;
+  }
+
+  pwSubmit?.addEventListener('click',()=>{
+    if(pwInput.value===PASS){
+      unlocked=true;
+      stepPw.hidden=true;
+      stepData.hidden=false;
+      loadData();
+    }else{
+      pwMsg.textContent='Incorrect password';
+      pwInput.focus();
+    }
   });
+  pwInput?.addEventListener('keydown',e=>{
+    if(e.key==='Enter') pwSubmit.click();
+  });
+  refreshBtn?.addEventListener('click',()=>loadData());
+  copyBtn?.addEventListener('click',async()=>{
+    const data = await loadData();
+    const csv = ['index,email,epic,ts_iso'].concat(
+      data.map((r,i)=>`${i+1},"${r.email}","${r.epic}",${new Date(r.ts).toISOString()}`)
+    ).join('\n');
+    navigator.clipboard.writeText(csv).then(()=>{
+      copyBtn.textContent='Copied';
+      setTimeout(()=>copyBtn.textContent='Copy CSV',1200);
+    });
+  });
+  logoutBtn?.addEventListener('click',()=>{
+    unlocked=false;
+    showModal(true);
+  });
+  closeBtns.forEach(b=>b?.addEventListener('click',()=>{modal.hidden=true;}));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape' && !modal.hidden){
+      modal.hidden=true;
+    }
+  });
+
+  // Combo: Shift+F then (within 1.5s) press P
+  document.addEventListener('keydown',e=>{
+    if(e.key==='F' && e.shiftKey){
+      awaitingP=true;
+      setTimeout(()=>awaitingP=false,1500);
+    }else if(awaitingP && (e.key==='p' || e.key==='P')){
+      awaitingP=false;
+      showModal(!unlocked);
+      if(unlocked) loadData();
+    }
+  });
+})();
+</script>
+<script>
+(function(){
+  const form = document.getElementById('free-trial-form');
+  if(!form) return;
+  const statusEl = document.getElementById('trial-status');
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  function readLocal(){ try { return JSON.parse(localStorage.getItem('rl_free_trials'))||[] } catch { return [] } }
+  function writeLocal(list){ localStorage.setItem('rl_free_trials', JSON.stringify(list)); }
+  function isDup(list, email, epic){
+    const e = email.toLowerCase();
+    const ep = epic.toLowerCase();
+    return list.some(r =>
+      (r.email && r.email.toLowerCase() === e) ||
+      (r.epic && r.epic.toLowerCase() === ep)
+    );
+  }
 
   form.addEventListener('submit', async e=>{
     e.preventDefault();
-    statusEl.className='form-status';
     const email = form.email.value.trim();
-    const epic = form.epic.value.trim();
-    const emailL = email.toLowerCase();
-    const epicL = epic.toLowerCase();
+    const epic  = form.epic.value.trim();
+    statusEl.textContent = '';
+    statusEl.className = 'form-status';
     if(!email || !epic){
-      statusEl.textContent='Fill all fields.'; statusEl.classList.add('err'); return;
-    }
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
-      statusEl.textContent='Invalid email.'; statusEl.classList.add('err'); return;
-    }
-    const local = readLocal();
-    if(local.some(r => r.email?.toLowerCase()===emailL || r.epic?.toLowerCase()===epicL)){
-      showDuplicate('That email or Epic is already registered for the trial.');
-      statusEl.textContent='Duplicate blocked.'; statusEl.classList.add('err');
+      statusEl.textContent = 'Fill all fields';
+      statusEl.classList.add('err');
       return;
     }
-    statusEl.textContent='Submitting...';
-    const record = {email, epic, ts: Date.now()};
-    let serverAccepted = false;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    // Load existing (server + local) to pre‑check duplicates
+    let serverList = [];
     try{
-      const res = await fetch('/api/free-trial',{
+      const r = await fetch('/api/free-trial',{cache:'no-store'});
+      if(r.ok) serverList = await r.json();
+    }catch{}
+    const localList = readLocal();
+    const combined = [...serverList, ...localList];
+
+    if(isDup(combined, email, epic)){
+      statusEl.textContent = 'Email or Epic already used';
+      statusEl.classList.add('err');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Claim Free Trial';
+      return;
+    }
+
+    const record = { email, epic, ts: Date.now() };
+
+    // Try server save first
+    let serverDup = false;
+    try{
+      const resp = await fetch('/api/free-trial',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(record)
+        body: JSON.stringify(record)
       });
-      if(res.status===409){
-        showDuplicate('Already registered on server.');
-        statusEl.textContent='Duplicate.'; statusEl.classList.add('err');
-        return;
+      if(resp.status === 409){
+        serverDup = true;
+      } else if(!resp.ok){
+        // Non-duplicate error; we still keep local
       }
-      if(res.ok) serverAccepted = true;
-    }catch(_e){}
-    // Store locally regardless (or only on success if you prefer)
-    if(serverAccepted || true){
-      local.push(record);
-      writeLocal(local);
+    }catch{
+      // Network fail -> still keep local
     }
-    statusEl.textContent='Received. Check your email soon.';
+
+    if(serverDup){
+      statusEl.textContent = 'Email or Epic already used';
+      statusEl.classList.add('err');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Claim Free Trial';
+      return;
+    }
+
+    // Store locally if not already there
+    const latestLocal = readLocal();
+    if(!isDup(latestLocal, email, epic)){
+      latestLocal.push(record);
+      writeLocal(latestLocal);
+    }
+
+    statusEl.textContent = 'Submitted';
     statusEl.classList.add('ok');
     form.reset();
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Claim Free Trial';
   });
-
-  // Dev viewer (Shift+F) only if dev
-  if(IS_DEV && viewer && viewerPre){
-    document.addEventListener('keydown',e=>{
-      if(e.shiftKey && e.key==='F'){
-        viewerPre.textContent = JSON.stringify(readLocal(),null,2);
-        viewer.classList.add('open');
-      }
-      if(e.key==='Escape' && viewer.classList.contains('open')){
-        viewer.classList.remove('open');
-      }
-    });
-    document.getElementById('close-trial-viewer')?.addEventListener('click',()=>viewer.classList.remove('open'));
-  }
 })();
 </script>
-<!-- ...existing CSS... -->
-.dup-modal{
-  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:6000;
-  font-family:inherit;
-}
-.dup-modal[hidden]{display:none;}
-.dup-modal__panel{
-  background:#1f222b;
-  border:1.5px solid #2d2f3a;
-  max-width:360px;width:90%;
-  padding:1.4rem 1.3rem 1.5rem;
-  border-radius:1.3rem;
-  text-align:center;
-  box-shadow:0 8px 32px -8px #000a;
-}
-.dup-modal__panel h3{
-  margin:.2rem 0 .8rem;
-  font-size:1.05rem;
-  color:#fff;
-  letter-spacing:.5px;
-}
-.dup-modal__panel p{
-  margin:0 0 1rem;
-  font-size:.85rem;
-  color:#a5b4fc;
-  line-height:1.3;
-}
-.dup-modal__panel button{
-  background:#6366f1;
-  color:#fff;
-  font-weight:600;
-  border:none;
-  padding:.65rem 1.2rem;
-  border-radius:.7rem;
-  cursor:pointer;
-  font-size:.85rem;
-}
-</style>
-<!-- ...inside <body> before closing tag add: -->
-<div id="dup-modal" class="dup-modal" role="alertdialog" aria-modal="true" aria-labelledby="dupTitle" aria-describedby="dupMsg" hidden>
-  <div class="dup-modal__panel">
-    <h3 id="dupTitle">Already Used</h3>
-    <p id="dupMsg">This email or Epic username was already registered.</p>
-    <button type="button" id="dupClose">OK</button>
-  </div>
-</div>
-</body>
-</html>
