@@ -960,6 +960,343 @@
                 box-sizing: border-box;
             }
         }
+        .fade-transition {
+            opacity: 1;
+            transition: opacity 0.6s cubic-bezier(.4,0,.2,1);
+        }
+        .fade-transition.fade-out {
+            opacity: 0;
+        }
+        #loader {
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: linear-gradient(120deg, #6366f1 0%, #a5b4fc 100%);
+            display: flex;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+            align-items: center;
+            justify-content: center;
+        }
+        #loader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loader-text {
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            display: flex;
+            gap: 0.1em;
+        }
+        .loader-text span {
+            display: inline-block;
+            color: #fff;
+            animation: wave 1.2s infinite;
+            animation-delay: calc(var(--i) * 0.09s);
+            transition: color 0.3s;
+        }
+        .loader-text span.active {
+            color: #6366f1;
+        }
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); }
+            20% { transform: translateY(-18px); }
+            40% { transform: translateY(0); }
+        }
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            margin-top: 2em;
+            margin-bottom: 3em;
+            position: relative;
+        }
+        .hero-glass {
+            background: var(--glass-bg);
+            box-shadow: 0 8px 32px #6366f122;
+            border-radius: 2.5em;
+            padding: 3.5em 2.5em 3em 2.5em;
+            max-width: 540px;
+            width: 95%;
+            backdrop-filter: var(--glass-blur);
+            text-align: center;
+            border: 2.5px solid #23243a;
+            margin: 0 auto;
+        }
+        .hero-glass h2 {
+            font-size: 2.3rem;
+            color: #fff;
+            margin-bottom: 0.7em;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            text-shadow: 0 2px 16px #6366f144;
+        }
+        .hero-glass p {
+            color: #a5b4fc;
+            font-size: 1.18rem;
+            margin-bottom: 2em;
+        }
+        .hero-btn {
+            background: var(--accent-gradient);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 1.1em 2.6em;
+            font-size: 1.15rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 16px rgba(99,102,241,0.13);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+        }
+        .hero-btn:hover {
+            background: linear-gradient(90deg, #4f46e5 0%, #6366f1 100%);
+            transform: translateY(-2px) scale(1.07);
+            box-shadow: 0 4px 24px #6366f144;
+        }
+        .how-section {
+            max-width: 1100px;
+            margin: 5em auto 3em auto;
+            padding: 0 1em;
+            text-align: center;
+            animation: fadeInUp 1.2s cubic-bezier(.4,0,.2,1);
+        }
+        .how-title {
+            color: #fff;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 2.2em;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 16px #6366f144;
+        }
+        .how-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2.5em;
+            justify-content: center;
+        }
+        .how-step {
+            border: 2px solid #23243a;
+            background-clip: padding-box;
+            border-radius: 1.5em;
+            transition: box-shadow 0.3s, border 0.3s, transform 0.3s;
+            background: rgba(255,255,255,0.04);
+            box-shadow: 0 2px 12px #6366f122;
+            padding: 2em 1.2em;
+            min-width: 180px;
+        }
+        .how-step:hover {
+            border: 2px solid #6366f1;
+            box-shadow: 0 8px 32px rgba(99,102,241,0.18), 0 2px 8px rgba(0,0,0,0.09);
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-8px) scale(1.04) rotate(-1deg);
+        }
+        .how-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.7em;
+            color: #a5b4fc;
+            animation: bounce 2s infinite;
+        }
+        .how-label {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.5em;
+            color: #fff;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0);}
+            50% { transform: translateY(-10px);}
+        }
+        .features-section {
+            max-width: 1200px;
+            margin: 6em auto 4em auto;
+            padding: 0 1em;
+        }
+        .features-title {
+            text-align: center;
+            color: #fff;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 2.5em;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 16px #6366f144;
+        }
+        .features-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2.5em;
+            justify-content: center;
+        }
+        .feature-card {
+            border: 2px solid #23243a;
+            background-clip: padding-box;
+            border-radius: 1.5em;
+            transition: box-shadow 0.3s, border 0.3s, transform 0.3s;
+            background: rgba(255,255,255,0.04);
+            box-shadow: 0 2px 12px #6366f122;
+            padding: 2em 1.2em;
+            min-width: 180px;
+        }
+        .feature-card:hover {
+            border: 2px solid #6366f1;
+            box-shadow: 0 8px 32px rgba(99,102,241,0.18), 0 2px 8px rgba(0,0,0,0.09);
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-8px) scale(1.04) rotate(-1deg);
+        }
+        .feature-card .icon {
+            font-size: 2.7rem;
+            margin-bottom: 0.7em;
+            color: #a5b4fc;
+        }
+        .feature-card h3 {
+            color: #fff;
+            margin-bottom: 1em;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        .testimonials-section {
+            background: var(--accent-gradient);
+            padding: 5em 0 4em 0;
+            border-radius: 2em 2em 0 0;
+            box-shadow: 0 -2px 24px #6366f11a;
+            margin-top: 4em;
+        }
+        .testimonials-title {
+            color: #fff;
+            font-size: 2.1rem;
+            font-weight: 800;
+            margin-bottom: 2.5em;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 16px #6366f144;
+        }
+        .testimonial-carousel {
+            position: relative;
+            max-width: 420px;
+            margin: 0 auto;
+            overflow: hidden;
+            min-height: 220px;
+        }
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(.4,0,.2,1);
+            will-change: transform;
+        }
+        .testimonial-card {
+            background: var(--glass-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 6px 24px #6366f11a, 0 1.5px 4px #0001;
+            border: 2px solid #23243a;
+            min-width: 100%;
+            margin: 0 0.5em;
+            padding: 2.5em 1.5em;
+            color: #fff;
+        }
+        .testimonial-card .author {
+            color: #a5b4fc;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        .testimonial-next, .testimonial-prev {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #23243a;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 2.5em;
+            height: 2.5em;
+            font-size: 1.3em;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #6366f122;
+            transition: background 0.2s;
+            z-index: 2;
+            opacity: 0.85;
+        }
+        .testimonial-next:hover, .testimonial-prev:hover {
+            background: #6366f1;
+        }
+        .testimonial-next { right: 10px; }
+        .testimonial-prev { left: 10px; }
+        @media (max-width: 900px) {
+            .features-grid, .testimonials-grid, .how-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+            .features-section, .testimonials-section, .how-section {
+                padding: 0 0.5em;
+            }
+        }
+        @media (max-width: 600px) {
+            header, .features-section, .testimonials-section, .discord-section, footer, .how-section {
+                padding-left: 0.5em;
+                padding-right: 0.5em;
+            }
+            .hero-glass {
+                padding: 2em 1em;
+            }
+            .testimonial-carousel {
+                max-width: 98vw;
+            }
+            .testimonial-card {
+                padding: 2em 0.5em;
+                font-size: 1.1rem;
+            }
+            .how-step {
+                padding: 2em 0.7em;
+            }
+            .navigation-tab,
+            .navigation-tab--compact {
+                width: 98vw;
+                min-width: 0;
+                left: 1vw;
+                transform: none;
+                padding: 0 2px;
+                height: 60px;
+                bottom: 12px;
+            }
+            .navigation-tab--compact .navigation-tab-item,
+            .navigation-tab .navigation-tab-item {
+                width: 48px;
+                min-width: 48px;
+                height: 48px;
+                padding: 0;
+            }
+            .navigation-tab--compact .navigation-tab__icon,
+            .navigation-tab .navigation-tab__icon {
+                height: 22px;
+                width: 22px;
+            }
+            .navigation-tab--compact .navigation-tab__icon svg,
+            .navigation-tab .navigation-tab__icon svg {
+                width: 22px;
+                height: 22px;
+            }
+            #logo {
+                width: 48px;
+                margin-top: 1em;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .hero-glass h2 {
+                font-size: 1.3rem;
+            }
+            .features-title, .how-title {
+                font-size: 1.3rem;
+            }
+            .feature-card {
+                min-width: 0;
+                width: 95vw;
+                box-sizing: border-box;
+            }
+        }
         .discord-section {
             text-align: center;
             padding: 4em 0 3em 0;
@@ -1155,10 +1492,10 @@
         </div>
     </section>
     <section class="discord-section">
-        <h2>Join Our Discord</h2>
+        <h2>Join Our Discord (not available)</h2>
         <img src="https://th.bing.com/th/id/OIP.SqoeKJPmo667mmrM6IQCxwHaEK?rs=1&pid=ImgDetMain" alt="Discord Logo" id="discord-logo">
         <div class="discord-link">
-            <a href="https://discord.gg/wvCRx3NqNg" target="_blank">Click Here to Join</a>
+            <a href="" target="_blank">Click Here to Join</a>
         </div>
     </section>
     <footer>
