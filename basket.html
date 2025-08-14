@@ -5,6 +5,9 @@
     <meta name="description" content="RL Boosting - Basket">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basket - RL Boosting</title>
+    <meta name="theme-color" content="#181a20">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -285,6 +288,7 @@
     </style>
 </head>
 <body class="fade-transition">
+    <a href="#basket-main" class="skip-link" style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to basket</a>
     <div class="bg-shape shape1"></div>
     <div class="bg-shape shape2"></div>
     <div class="bg-shape shape3"></div>
@@ -292,10 +296,10 @@
         <img src="https://i.pinimg.com/originals/12/44/02/12440274c10c5f0f95b2766904b80bc3.jpg" alt="Logo" id="logo">
         <h1>RL Boosting</h1>
     </header>
-    <main>
+    <main id="basket-main" tabindex="-1">
         <section class="basket-section">
             <h2>Your Basket</h2>
-            <ul class="basket-list" id="basket-list"></ul>
+            <ul class="basket-list" id="basket-list" role="list" aria-live="polite"></ul>
             <div class="basket-total" id="basket-total"></div>
             <div class="empty-basket" id="empty-basket" style="display:none;">Your basket is empty.</div>
 
@@ -321,11 +325,17 @@
                   publishable-key="pk_live_51RuKtaKOYFp3OflgIOG5Av7V4ekzAHGNZqxzp0F7ZyAh9aMtXgKPpLihkHwXtg6HqxLNRoRdO3UJVBtvXv8fe4Ic00MD33p6ds">
                 </stripe-buy-button>
               </div>
+              <div data-product="monthly subscription" style="display:none;">
+                <stripe-buy-button
+                  buy-button-id="buy_btn_1Rw9xpKOYFp3OflgN0WsrUta"
+                  publishable-key="pk_live_51RuKtaKOYFp3OflgIOG5Av7V4ekzAHGNZqxzp0F7ZyAh9aMtXgKPpLihkHwXtg6HqxLNRoRdO3UJVBtvXv8fe4Ic00MD33p6ds">
+                </stripe-buy-button>
+              </div>
               <p id="stripe-note" style="margin:0.9em 0 0;font-size:0.75rem;color:#a5b4fc;display:none;">Live mode enabled.</p>
             </div>
         </section>
     </main>
-    <nav class="navigation-tab navigation-tab--compact" style="left:50vw;transform:translateX(-50%);">
+    <nav class="navigation-tab navigation-tab--compact" aria-label="Primary" style="left:50vw;transform:translateX(-50%);">
         <div class="navigation-tab-item" onclick="window.location.href='index.html'" style="--nav-index:0">
             <span class="navigation-tab__icon">
                 <!-- Home Icon -->
@@ -469,10 +479,15 @@
 
   btn.addEventListener('click', () => {
     const items = (()=>{try{return JSON.parse(localStorage.getItem('rlbasket'))||[]}catch{return[]}})();
-    const names = items.map(i => (i.name||'').toLowerCase());
-    const supported = ['quick boost','team up session','weekend grind'].filter(n => names.includes(n));
+    const names = items.map(i => (i.name||'').toLowerCase();
+    const supported = [
+      'quick boost',
+      'team up session',
+      'weekend grind',
+      'monthly subscription'
+    ].filter(n => names.includes(n));
     if(supported.length===0){
-      alert('Checkout available for Quick Boost, Team Up Session, or Weekend Grind.');
+      alert('Checkout available for Quick Boost, Team Up Session, Weekend Grind, or Monthly Subscription.');
       return;
     }
     container.style.display='block';
