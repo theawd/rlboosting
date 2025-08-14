@@ -801,31 +801,24 @@ window.setSupportCount && window.setSupportCount(2);
           <button class="buy-btn" onclick="addToBasketAnim(this, 'Quick Boost', 3.99)">Buy Now</button>
           <div class="added-to-basket" style="display:none;">
             <span class="cart-anim">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="9" cy="21" r="1.5"/>
-                <circle cx="19" cy="21" r="1.5"/>
-                <path d="M2.5 4H5l2.68 13.39A2 2 0 0 0 9.62 19h7.76a2 2 0 0 0 1.94-1.61L21.5 7H6"/>
-              </svg>
+              <!-- svg -->
             </span>
             <span style="color:#6366f1;font-weight:600;">Added to basket</span>
           </div>
         </div>
         <div class="service-card">
-          <span class="service-card__glow-ring"></span>
-          <div class="service-card__icon-wrap">
-            <div class="icon">🤝</div>
-          </div>
-          <h3>Triple Play Boost </h3>
+          <div class="icon">🤝</div>
+          <h3>Team Up Session</h3>
           <div class="service-card__price">
             <span class="price-tag">€7.99</span>
           </div>
           <ul>
             <li>3 hours with Grand Champ staff</li>
-            <li>Progress updates</li>
+            <li>Find teammates or let us boost</li>
             <li>Flexible scheduling</li>
           </ul>
-          <button class="buy-btn" onclick="addToBasketAnim(this, 'Triple Play Boost (3hr)', 7.00)">Buy Now</button>
-          <div class="added-to-basket" style="display:none;">
+          <button class="buy-btn" onclick="addToBasketAnim(this, 'Team Up Session', 7.00)">Buy Now</button>
+          <div class="added-to-basket" style="display:none; margin-top:1em;">
             <span class="cart-anim">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="9" cy="21" r="1.5"/>
@@ -833,15 +826,11 @@ window.setSupportCount && window.setSupportCount(2);
                 <path d="M2.5 4H5l2.68 13.39A2 2 0 0 0 9.62 19h7.76a2 2 0 0 0 1.94-1.61L21.5 7H6"/>
               </svg>
             </span>
-            <span style="color:#6366f1;font-weight:600;">Added to basket</span>
+            <span style="color:#6366f1; font-weight:600; margin-left:0.7em;">Added to basket</span>
           </div>
         </div>
         <div class="service-card">
-          <span class="service-card__glow-ring"></span>
-          <span class="service-card__badge">Value</span>
-          <div class="service-card__icon-wrap">
-            <div class="icon">🔥</div>
-          </div>
+          <div class="icon">🔥</div>
           <h3>Weekend Grind</h3>
           <div class="service-card__price">
             <span class="price-tag">€12.99</span>
@@ -850,12 +839,9 @@ window.setSupportCount && window.setSupportCount(2);
             <li>6 hours of Grand Champ tm8</li>
             <li>Best value</li>
             <li>Priority support</li>
-            <li>Flexible scheduling</li>
-            <li>Progress updates</li>
-            <li>Queue skip for weekend orders</li>
           </ul>
           <button class="buy-btn" onclick="addToBasketAnim(this, 'Weekend Grind', 12.00)">Buy Now</button>
-          <div class="added-to-basket" style="display:none;">
+          <div class="added-to-basket" style="display:none; margin-top:1em;">
             <span class="cart-anim">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="9" cy="21" r="1.5"/>
@@ -863,36 +849,7 @@ window.setSupportCount && window.setSupportCount(2);
                 <path d="M2.5 4H5l2.68 13.39A2 2 0 0 0 9.62 19h7.76a2 2 0 0 0 1.94-1.61L21.5 7H6"/>
               </svg>
             </span>
-            <span style="color:#6366f1;font-weight:600;">Added to basket</span>
-          </div>
-        </div>
-        <!-- Subscription Card -->
-        <div class="service-card service-card--featured">
-          <span class="service-card__glow-ring"></span>
-          <span class="service-card__badge">Subscription</span>
-          <div class="service-card__icon-wrap">
-            <div class="icon">💎</div>
-          </div>
-          <h3>Monthly Boost Subscription</h3>
-          <div class="service-card__price">
-            <span class="price-tag">€9.99/mo</span>
-          </div>
-          <ul>
-            <li>Up to 5 hours boosting/month</li>
-            <li>Priority queue & support</li>
-            <li>Cancel anytime</li>
-            <li>Receive exclusive "VIP" title</li>
-          </ul>
-          <button class="buy-btn" onclick="addToBasketAnim(this, 'Monthly Subscription', 9.99)">Subscribe</button>
-          <div class="added-to-basket" style="display:none;">
-            <span class="cart-anim">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#43e97b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="9" cy="21" r="1.5"/>
-                <circle cx="19" cy="21" r="1.5"/>
-                <path d="M2.5 4H5l2.68 13.39A2 2 0 0 0 9.62 19h7.76a2 2 0 0 0 1.94-1.61L21.5 7H6"/>
-              </svg>
-            </span>
-            <span style="color:#43e97b;font-weight:600;">Added to basket</span>
+            <span style="color:#6366f1; font-weight:600; margin-left:0.7em;">Added to basket</span>
           </div>
         </div>
       </div>
@@ -1532,9 +1489,9 @@ const FORM_ENDPOINT = 'https://formspree.io/f/xldlaavb';
     const fd = new FormData();
     fd.append('email', email);
     fd.append('message', msg);
-       try{
+    try{
       const r = await fetch(FORM_ENDPOINT, {
-        method:'POST,
+        method:'POST',
         body: fd,
         headers:{ 'Accept':'application/json' }
       });
@@ -1562,7 +1519,6 @@ formbutton("create", {
   title: "Free Trial / Support",
   description: "Enter details to request your free trial or ask a question.",
   fields: [
-
     {
       type: "email",
       label: "Email",
