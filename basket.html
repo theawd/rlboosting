@@ -325,6 +325,7 @@
                   publishable-key="pk_live_51RuKtaKOYFp3OflgIOG5Av7V4ekzAHGNZqxzp0F7ZyAh9aMtXgKPpLihkHwXtg6HqxLNRoRdO3UJVBtvXv8fe4Ic00MD33p6ds">
                 </stripe-buy-button>
               </div>
+              <!-- Monthly Boost Subscription Stripe Button -->
               <div data-product="monthly subscription" style="display:none;">
                 <stripe-buy-button
                   buy-button-id="buy_btn_1Rw9xpKOYFp3OflgN0WsrUta"
@@ -479,15 +480,10 @@
 
   btn.addEventListener('click', () => {
     const items = (()=>{try{return JSON.parse(localStorage.getItem('rlbasket'))||[]}catch{return[]}})();
-    const names = items.map(i => (i.name||'').toLowerCase();
-    const supported = [
-      'quick boost',
-      'team up session',
-      'weekend grind',
-      'monthly subscription'
-    ].filter(n => names.includes(n));
+    const names = items.map(i => (i.name||'').toLowerCase());
+    const supported = ['quick boost','team up session','weekend grind'].filter(n => names.includes(n));
     if(supported.length===0){
-      alert('Checkout available for Quick Boost, Team Up Session, Weekend Grind, or Monthly Subscription.');
+      alert('Checkout available for Quick Boost, Team Up Session, or Weekend Grind.');
       return;
     }
     container.style.display='block';
