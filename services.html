@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RL Boosting - Services</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <title>RL Boosting - Services</title>
+  <meta name="theme-color" content="#181a20">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --accent: #6366f1;
@@ -634,14 +637,15 @@
     </style>
 </head>
 <body class="fade-transition services-bg">
+  <a href="#services-main" class="skip-link" style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to main content</a>
     <div class="bg-shape shape1"></div>
     <div class="bg-shape shape2"></div>
     <div class="bg-shape shape3"></div>
     <div class="dev-banner">Work in Development</div>
-    <header>
-        <img src="https://i.pinimg.com/originals/12/44/02/12440274c10c5f0f95b2766904b80bc3.jpg" alt="Logo" id="logo">
-        <h1>RL Boosting</h1>
-    </header>
+  <header>
+    <img src="https://i.pinimg.com/originals/12/44/02/12440274c10c5f0f95b2766904b80bc3.jpg" alt="RL Boosting logo" id="logo" fetchpriority="high">
+    <h1>RL Boosting</h1>
+  </header>
     <!-- Add this widget at the very top of your <body> in services.html, just after <body> and before any other content -->
 <div id="countdown-widget" style="max-width:600px;margin:2em auto 1.5em auto;padding:1.5em 1em 1.2em 1em;background:rgba(99,102,241,0.13);border-radius:1.5em;box-shadow:0 4px 24px #6366f122,0 1.5px 4px rgba(0,0,0,0.04);text-align:center;backdrop-filter:blur(8px);">
   <div style="font-size:1.35rem;font-weight:700;color:#6366f1;letter-spacing:-1px;margin-bottom:0.5em;">
@@ -679,8 +683,78 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 </script>
-    <section class="services-section">
-      <div class="services-title">Boosting Packages</div>
+
+<!-- Community Goal bar -->
+<div id="goal-widget" class="goal-widget" aria-live="polite" style="max-width:600px;margin:0.8em auto 1.8em auto;padding:1.1em 1em 1.2em;background:rgba(165,180,252,0.12);border-radius:1.4em;box-shadow:0 4px 24px #6366f122,0 1.5px 4px rgba(0,0,0,0.04);backdrop-filter:blur(8px);">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-bottom:.6rem;">
+    <div style="font-weight:800;color:#a5b4fc;letter-spacing:.2px;">Community Goal</div>
+    <div style="font-weight:800;color:#fff;"><span id="goal-current">0</span>/<span id="goal-target">10</span></div>
+  </div>
+  <div class="goal-sub" style="color:#cdd2e9;font-size:.95rem;margin:.2rem 0 .8rem;">
+    Hit 10 purchases to make the Free Trial permanent. Early supporters (before 10) get an OG tag and a spot on our Support Wall.
+  </div>
+  <div class="goal-progress" role="progressbar" aria-label="Purchases toward community goal" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" style="position:relative;height:12px;border-radius:999px;background:rgba(255,255,255,0.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.08);overflow:hidden;">
+    <div id="goal-fill" style="height:100%;width:0%;background:linear-gradient(90deg,#6366f1,#8b5cf6);box-shadow:0 4px 18px -6px #6366f1;transition:width .6s cubic-bezier(.19,1,.22,1);"></div>
+  </div>
+</div>
+<style>
+/* Goal met visual */
+#goal-widget.goal-met .goal-sub { color:#d1fae5 !important; }
+#goal-widget.goal-met .goal-progress { background:rgba(16,185,129,0.2) !important; }
+#goal-widget.goal-met #goal-fill { background:linear-gradient(90deg,#22c55e,#43e97b) !important; box-shadow:0 4px 18px -6px #22c55e !important; }
+/* Mobile spacing tweak */
+@media (max-width:600px){
+  #goal-widget{ margin: .6em auto 1.2em; padding: .9em .85em 1em; }
+}
+</style>
+<script>
+(function(){
+  const TARGET = 10;
+  const key = 'rl_support_count'; // manually tracked purchases count
+  const curEl = document.getElementById('goal-current');
+  const tgtEl = document.getElementById('goal-target');
+  const fill = document.getElementById('goal-fill');
+  const bar = document.querySelector('#goal-widget .goal-progress');
+  const wrap = document.getElementById('goal-widget');
+  const sub = document.querySelector('#goal-widget .goal-sub');
+  const baseText = sub ? sub.textContent : '';
+
+  function clamp(n){ return Math.max(0, Math.min(TARGET, Number.isFinite(n)? Math.floor(n) : 0)); }
+  function render(n){
+    const cur = clamp(n);
+    curEl.textContent = String(cur);
+    tgtEl.textContent = String(TARGET);
+    const pct = Math.min(100, (cur / TARGET) * 100);
+    fill.style.width = pct + '%';
+    bar.setAttribute('aria-valuenow', String(cur));
+    const met = cur >= TARGET;
+    wrap.classList.toggle('goal-met', met);
+    if (sub) {
+      sub.textContent = met
+        ? 'Goal reached! Free Trial becomes permanent. OG tags granted to early supporters.'
+        : baseText;
+    }
+  }
+
+  // Initial from localStorage (setSupportCount can update it)
+  const start = Number(localStorage.getItem(key) || 0);
+  render(start);
+
+  // Expose helper to adjust count: setSupportCount(3)
+  window.setSupportCount = function(n){
+    const v = clamp(Number(n));
+    localStorage.setItem(key, String(v));
+    render(v);
+  };
+})();
+</script>
+<script>
+// Set Community Goal progress to 2/10
+window.setSupportCount && window.setSupportCount(2);
+</script>
+    <main id="services-main" tabindex="-1">
+    <section class="services-section" aria-labelledby="boosting-title">
+      <div id="boosting-title" class="services-title">Boosting Packages</div>
       <div class="service-cards">
         <!-- Free Trial Card -->
         <div class="service-card service-card--featured">
@@ -779,7 +853,8 @@ setInterval(updateCountdown, 1000);
           </div>
         </div>
       </div>
-    </section>
+  </section>
+  </main>
     <nav class="navigation-tab navigation-tab--compact" style="left:50vw;transform:translateX(-50%);">
         <div class="navigation-tab-item{active_home}" onclick="window.location.href='index.html'" style="--nav-index:0">
             <span class="navigation-tab__icon">
