@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>RL Boosting - Donations</title>
+<meta name="theme-color" content="#181a20">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -178,8 +181,9 @@ h1{margin:1.2rem 0 0;font-size:2.4rem;font-weight:800;letter-spacing:-1px;color:
 </style>
 </head>
 <body>
+  <a href="#donations-main" class="skip-link" style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to donation tiers</a>
   <a href="index.html" class="back-btn" aria-label="Return to Home"><span>←</span>Back</a>
-  <div class="page-wrap">
+  <main id="donations-main" class="page-wrap" tabindex="-1">
     <h1>Support RL Boosting</h1>
     <div class="section-head">
       <h2>Donation Tiers</h2>
@@ -230,10 +234,12 @@ h1{margin:1.2rem 0 0;font-size:2.4rem;font-weight:800;letter-spacing:-1px;color:
       <h3>Support Wall</h3>
       <div class="donor-tags" id="donor-tags">
         <span>filipipi stinky</span>
+        <span>Ethan_ManU_B</span>
+        <span>frostyzcold</span>
       </div>
       <div class="footer-note">Recent supporters appear here.</div>
     </div>
-  </div>
+  </main>
 
   <!-- Keep only the Stripe script (remove duplicate buttons) -->
   <script async src="https://js.stripe.com/v3/buy-button.js"></script>
@@ -247,6 +253,22 @@ h1{margin:1.2rem 0 0;font-size:2.4rem;font-weight:800;letter-spacing:-1px;color:
       if(params.get('prime')==='1') tag.classList.add('featured');
       document.getElementById('donor-tags').appendChild(tag);
     }
+  })();
+  </script>
+  <script>
+  // Ensure these supporters are present
+  (function(){
+    const required = ['Ethan_ManU_B','frostyzcold'];
+    const list = document.getElementById('donor-tags');
+    if (!list) return;
+    const existing = new Set([...list.children].map(el => el.textContent.trim().toLowerCase()));
+    required.forEach(name => {
+      if (!existing.has(name.toLowerCase())) {
+        const span = document.createElement('span');
+        span.textContent = name;
+        list.appendChild(span);
+      }
+    });
   })();
   </script>
 </body>
