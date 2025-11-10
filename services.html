@@ -189,7 +189,7 @@
         .fade-transition.fade-out {
             opacity: 0;
         }
-        /* Redesigned Services Section */
+        
         .services-section {
             max-width: 1200px;
             margin: 4em auto 3em auto;
@@ -482,7 +482,7 @@
           box-shadow:0 10px 34px -10px #38f9d7cc, 0 0 0 1px rgba(0,0,0,0.35) inset;
         }
 
-        /* Added-to-basket state keep */
+       
         .added-to-basket {
           margin-top:1.2rem;
           background:rgba(99,102,241,0.12);
@@ -498,7 +498,7 @@
           background:rgba(56,249,215,0.14);
         }
 
-        /* Responsive fine-tune */
+        
         @media (max-width: 900px) {
           .service-card { min-height: 420px; }
         }
@@ -582,7 +582,7 @@
     letter-spacing: 1px;
   }
 
-  /* Navigation bar compress */
+  
   .navigation-tab,
   .navigation-tab--compact {
     height: 56px;
@@ -596,19 +596,19 @@
     height: 24px;
   }
 
-  /* Hide large background blobs to reduce visual clutter */
+  
   .bg-shape.shape2,
   .bg-shape.shape3 { display:none; }
   .bg-shape.shape1 { opacity:.12; filter:blur(28px); }
 
-  /* Donate bubble hidden to free space */
+  
   .donate-fab { display:none !important; }
 
-  /* Admin modal table scroll hint size */
+ 
   .admin-table { font-size:.58rem; }
 }
 
-/* Ultra‑narrow tweaks */
+
 @media (max-width: 400px) {
   .service-card {
     padding: .95rem .75rem 1.1rem;
@@ -618,10 +618,10 @@
   .price-tag { font-size: .8rem; }
 }
 
-/* Prevent layout shift on very tall buttons */
+
 .service-card .buy-btn { line-height: 1.05; }
 
-/* Restore donate button on mobile and keep clear of bottom nav */
+
 @media (max-width: 600px) {
   .donate-fab {
     display: flex !important;
@@ -646,7 +646,7 @@
     <img src="https://i.pinimg.com/originals/12/44/02/12440274c10c5f0f95b2766904b80bc3.jpg" alt="RL Boosting logo" id="logo" fetchpriority="high">
     <h1>RL Boosting</h1>
   </header>
-    <!-- Add this widget at the very top of your <body> in services.html, just after <body> and before any other content -->
+   
 <div id="countdown-widget" style="max-width:600px;margin:2em auto 1.5em auto;padding:1.5em 1em 1.2em 1em;background:rgba(99,102,241,0.13);border-radius:1.5em;box-shadow:0 4px 24px #6366f122,0 1.5px 4px rgba(0,0,0,0.04);text-align:center;backdrop-filter:blur(8px);">
   <div style="font-size:1.35rem;font-weight:700;color:#6366f1;letter-spacing:-1px;margin-bottom:0.5em;">
     Free Trial Offer Ends Soon!
@@ -658,7 +658,7 @@
 </div>
 <script>
 function updateCountdown() {
-  // Set target date: September 20, 2025 23:59:59
+   
   const end = new Date('2025-09-20T23:59:59');
   const now = new Date();
   let diff = end - now;
@@ -684,7 +684,6 @@ updateCountdown();
 setInterval(updateCountdown, 1000);
 </script>
 
-<!-- Community Goal bar -->
 <div id="goal-widget" class="goal-widget" aria-live="polite" style="max-width:600px;margin:0.8em auto 1.8em auto;padding:1.1em 1em 1.2em;background:rgba(165,180,252,0.12);border-radius:1.4em;box-shadow:0 4px 24px #6366f122,0 1.5px 4px rgba(0,0,0,0.04);backdrop-filter:blur(8px);">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-bottom:.6rem;">
     <div style="font-weight:800;color:#a5b4fc;letter-spacing:.2px;">Community Goal</div>
@@ -698,11 +697,11 @@ setInterval(updateCountdown, 1000);
   </div>
 </div>
 <style>
-/* Goal met visual */
+
 #goal-widget.goal-met .goal-sub { color:#d1fae5 !important; }
 #goal-widget.goal-met .goal-progress { background:rgba(16,185,129,0.2) !important; }
 #goal-widget.goal-met #goal-fill { background:linear-gradient(90deg,#22c55e,#43e97b) !important; box-shadow:0 4px 18px -6px #22c55e !important; }
-/* Mobile spacing tweak */
+
 @media (max-width:600px){
   #goal-widget{ margin: .6em auto 1.2em; padding: .9em .85em 1em; }
 }
@@ -710,7 +709,7 @@ setInterval(updateCountdown, 1000);
 <script>
 (function(){
   const TARGET = 10;
-  const key = 'rl_support_count'; // manually tracked purchases count
+  const key = 'rl_support_count'; 
   const curEl = document.getElementById('goal-current');
   const tgtEl = document.getElementById('goal-target');
   const fill = document.getElementById('goal-fill');
@@ -736,11 +735,11 @@ setInterval(updateCountdown, 1000);
     }
   }
 
-  // Initial from localStorage (setSupportCount can update it)
+  
   const start = Number(localStorage.getItem(key) || 0);
   render(start);
 
-  // Expose helper to adjust count: setSupportCount(3)
+ 
   window.setSupportCount = function(n){
     const v = clamp(Number(n));
     localStorage.setItem(key, String(v));
@@ -749,14 +748,14 @@ setInterval(updateCountdown, 1000);
 })();
 </script>
 <script>
-// Set Community Goal progress to 2/10
-window.setSupportCount && window.setSupportCount(2);
+
+window.setSupportCount && window.setSupportCount(6);
 </script>
     <main id="services-main" tabindex="-1">
     <section class="services-section" aria-labelledby="boosting-title">
       <div id="boosting-title" class="services-title">Boosting Packages</div>
       <div class="service-cards">
-        <!-- Free Trial Card -->
+        
         <div class="service-card service-card--featured">
           <span class="service-card__glow-ring"></span>
           <span class="service-card__badge">Free</span>
@@ -858,26 +857,26 @@ window.setSupportCount && window.setSupportCount(2);
     <nav class="navigation-tab navigation-tab--compact" style="left:50vw;transform:translateX(-50%);">
         <div class="navigation-tab-item{active_home}" onclick="window.location.href='index.html'" style="--nav-index:0">
             <span class="navigation-tab__icon">
-                <!-- Home Icon -->
+               
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg>
             </span>
         </div>
         <div class="navigation-tab-item{active_services}" onclick="window.location.href='services.html'" style="--nav-index:1">
             <span class="navigation-tab__icon">
-                <!-- Services Icon (Tag) -->
+                
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
             </span>
         </div>
         <div class="navigation-tab-item{active_basket}" onclick="window.location.href='basket.html'" style="--nav-index:2">
             <span class="navigation-tab__icon" style="position:relative;">
-                <!-- Basket Icon (Shopping Bag) -->
+              
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                 <span id="basket-badge" style="display:none;position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;background:#f43f5e;color:#fff;border-radius:50%;font-size:0.95rem;font-weight:700;line-height:20px;text-align:center;box-shadow:0 2px 8px #f43f5e44;pointer-events:none;z-index:2;"></span>
             </span>
         </div>
         <div class="navigation-tab-item{active_chat}" onclick="window.location.href='chat.html'" style="--nav-index:3">
             <span class="navigation-tab__icon">
-                <!-- Glassy Chat Bubble Icon -->
+               
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="url(#glass-gradient)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <defs>
                         <linearGradient id="glass-gradient" x1="0" y1="0" x2="1" y2="1">
@@ -892,7 +891,7 @@ window.setSupportCount && window.setSupportCount(2);
     </nav>
     <script>
     function addToBasketAnim(btn, name, price) {
-        // Save to basket
+       
         let items = [];
         try {
             items = JSON.parse(localStorage.getItem('rlbasket')) || [];
@@ -900,7 +899,7 @@ window.setSupportCount && window.setSupportCount(2);
         items.push({name, price});
         localStorage.setItem('rlbasket', JSON.stringify(items));
 
-        // Animation: replace button with animated cart and message
+        
         const addedDiv = btn.parentElement.querySelector('.added-to-basket');
         btn.style.display = 'none';
         addedDiv.style.display = 'block';
@@ -908,8 +907,6 @@ window.setSupportCount && window.setSupportCount(2);
             addedDiv.classList.add('show');
         }, 10);
 
-        // No redirect to basket!
-        // User stays on the page and can click basket icon when ready
         if (window.updateBasketBadge) setTimeout(window.updateBasketBadge, 100);
     }
     </script>
@@ -931,14 +928,14 @@ window.setSupportCount && window.setSupportCount(2);
     });
     </script>
     <style>
-    /* Fix nav bar centering flash on initial load */
+   
     .navigation-tab,
     .navigation-tab--compact {
       left: 50vw !important;
       transform: translateX(-50%) !important;
     }
     </style>
-    <!-- Add this script at the end of <body> on EVERY PAGE (after your other scripts): -->
+    
 <script>
 function updateBasketBadge() {
     var badge = document.getElementById('basket-badge');
@@ -958,7 +955,7 @@ updateBasketBadge();
 window.addEventListener('storage', updateBasketBadge);
 window.updateBasketBadge = updateBasketBadge;
 
-// Patch addToBasketAnim if it exists
+
 if (typeof addToBasketAnim === "function") {
     const orig = addToBasketAnim;
     window.addToBasketAnim = function(...args) {
@@ -967,7 +964,7 @@ if (typeof addToBasketAnim === "function") {
     }
 }
 </script>
-<!-- Remove the popup/details JS for mobile cards -->
+
 <script>
 // DELETE this entire script block to remove the popup on product click
 /*
@@ -1010,11 +1007,11 @@ if (window.matchMedia("(max-width: 600px)").matches) {
 </script>
 <!-- Add this CSS just before </head> (after your main <style> block) -->
 <style>
-/* Mobile-first adjustments */
+
 @media (max-width: 600px) {
   body {
     font-size: 1rem;
-    padding-bottom: 80px; /* Make space for nav bar */
+    padding-bottom: 80px; 
   }
 
   header {
@@ -1028,7 +1025,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     font-size: 2rem;
   }
 
-  /* Countdown widget */
+  
   #countdown-widget {
     margin: 1em auto;
     padding: 1em 0.8em;
@@ -1041,7 +1038,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     font-size: 1.6rem;
   }
 
-  /* Service cards */
+  
   .services-section {
     margin: 2em auto;
     padding-bottom: 90px;
@@ -1065,7 +1062,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     width: 100%;
   }
 
-  /* Overlay details view on mobile */
+  
   .service-details {
     position: fixed;
     inset: 0;
@@ -1090,7 +1087,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     cursor: pointer;
   }
 
-  /* Navigation tab adjustments */
+  
   .navigation-tab,
   .navigation-tab--compact {
     width: 100%;
@@ -1108,12 +1105,12 @@ if (window.matchMedia("(max-width: 600px)").matches) {
   }
 }
 </style>
-<!-- --- Donate Floating Bubble --- -->
+
 <style>
 .donate-fab {
   position: fixed;
   right: 26px;
-  bottom: 118px; /* clears the round nav (70px high + 28px gap + buffer) */
+  bottom: 118px; 
   z-index: 150;
   display: flex;
   align-items: center;
@@ -1192,23 +1189,23 @@ if (window.matchMedia("(max-width: 600px)").matches) {
   outline-offset: 3px;
 }
 
-/* Mobile adjustment (nav is full width bottom) */
+
 @media (max-width: 600px) {
   .donate-fab {
     right: 16px;
-    bottom: 80px; /* nav height ~60 + gap */
+    bottom: 80px; 
     padding: .75rem 1rem .75rem .85rem;
     font-size: .88rem;
   }
   .donate-fab__icon { font-size:1.2rem; }
 }
 </style>
-<!-- Donate Bubble -->
+
 <a href="donations.html" class="donate-fab" aria-label="Donate to RL Boosting">
       <span class="donate-fab__icon">💖</span>
       <span class="donate-fab__label">Donate</span>
     </a>
-    <!-- REPLACE the existing dev viewer overlay + its script with the following: -->
+    
 <div id="admin-modal" class="admin-modal" hidden>
   <div class="admin-modal__panel" data-step="password">
     <h3 id="adminTitle">Protected Viewer</h3>
@@ -1356,7 +1353,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape' && !modal.hidden) modal.hidden=true;
 
-    // Original sequence: Shift+F then P within 1.5s
+    
     if(e.key==='F' && e.shiftKey){
       awaitingP=true;
       setTimeout(()=>awaitingP=false,1500);
@@ -1366,13 +1363,13 @@ if (window.matchMedia("(max-width: 600px)").matches) {
       if(unlocked) loadData();
     }
 
-    // Alternate combo: Ctrl+Alt+A
+    
     if(e.key==='a' && (e.ctrlKey||e.metaKey) && e.altKey){
       showModal(!unlocked);
       if(unlocked) loadData();
     }
 
-    // Quick typed sequence "fp" (case-insensitive) within 1s
+    
     if(/^[a-z]$/i.test(e.key)){
       seq += e.key.toLowerCase();
       clearTimeout(seqTimer);
@@ -1385,12 +1382,12 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     }
   });
 
-  // URL hash trigger (#admin)
+  
   if(location.hash === '#admin'){
     showModal(true);
   }
 
-  // Expose manual open in console
+  
   window.openAdminModal = ()=>showModal(!unlocked);
 
 })();
@@ -1420,7 +1417,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
       return;
     }
 
-    // Local duplicate check only (Formspree has no public list API)
+   
     const localList = readLocal();
     if(isDup(localList, email, epic)){
       statusEl.textContent='Email or Epic already used (local)';
@@ -1431,7 +1428,7 @@ if (window.matchMedia("(max-width: 600px)").matches) {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting...';
 
-    // Send to Formspree
+   
     const fd = new FormData();
     fd.append('email', email);
     fd.append('epicID', epic);
@@ -1447,7 +1444,6 @@ if (window.matchMedia("(max-width: 600px)").matches) {
       ok = resp.ok;
     }catch{}
 
-    // Store locally so viewer (if you unlock) can still show what THIS device sent
     const latest = readLocal();
     latest.push({ email, epic, ts: Date.now() });
     writeLocal(latest);
@@ -1564,14 +1560,14 @@ formbutton("create", {
   document.addEventListener('click', e=>{
     if(e.target && e.target.id === 'open-trial-btn'){
       if(openWidget()) return;
-      // Poll until library ready (max ~3s)
+    
       let tries = 0;
       const iv = setInterval(()=>{
         if(openWidget() || ++tries > 30) clearInterval(iv);
       },100);
     }
   });
-  // Optional deep link: services.html#trial
+  
   if(location.hash === '#trial'){
     let tries=0;
     const iv=setInterval(()=>{ if(openWidget() || ++tries>30) clearInterval(iv); },120);
