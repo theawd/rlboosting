@@ -305,7 +305,7 @@
 
             <button class="checkout-btn" id="checkout-btn">Checkout</button>
 
-            <!-- Updated: support multiple Stripe buttons (Quick Boost + Team Up Session + Weekend Grind) -->
+          
             <div id="stripe-checkout-container" style="display:none;margin-top:1.5em;padding:1.2em 1em;border:1.5px solid #23243a;border-radius:1.2em;background:rgba(255,255,255,0.06);backdrop-filter:blur(10px);">
               <div data-product="quick boost" style="display:none;">
                 <stripe-buy-button
@@ -325,7 +325,7 @@
                   publishable-key="pk_live_51RuKtaKOYFp3OflgIOG5Av7V4ekzAHGNZqxzp0F7ZyAh9aMtXgKPpLihkHwXtg6HqxLNRoRdO3UJVBtvXv8fe4Ic00MD33p6ds">
                 </stripe-buy-button>
               </div>
-              <!-- Monthly Boost Subscription Stripe Button -->
+              
               <div data-product="monthly subscription" style="display:none;">
                 <stripe-buy-button
                   buy-button-id="buy_btn_1Rw9xpKOYFp3OflgN0WsrUta"
@@ -339,26 +339,26 @@
     <nav class="navigation-tab navigation-tab--compact" aria-label="Primary" style="left:50vw;transform:translateX(-50%);">
         <div class="navigation-tab-item" onclick="window.location.href='index.html'" style="--nav-index:0">
             <span class="navigation-tab__icon">
-                <!-- Home Icon -->
+               
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg>
             </span>
         </div>
         <div class="navigation-tab-item" onclick="window.location.href='services.html'" style="--nav-index:1">
             <span class="navigation-tab__icon">
-                <!-- Services Icon (Tag) -->
+               
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
             </span>
         </div>
         <div class="navigation-tab-item active" style="--nav-index:2">
             <span class="navigation-tab__icon" style="position:relative;">
-                <!-- Basket Icon (Shopping Bag) -->
+                
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                 <span id="basket-badge" style="display:none;position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;background:#f43f5e;color:#fff;border-radius:50%;font-size:0.95rem;font-weight:700;line-height:20px;text-align:center;box-shadow:0 2px 8px #f43f5e44;pointer-events:none;z-index:2;"></span>
             </span>
         </div>
         <div class="navigation-tab-item" onclick="window.location.href='chat.html'" style="--nav-index:3">
             <span class="navigation-tab__icon">
-                <!-- Glassy Chat Bubble Icon -->
+                
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="url(#glass-gradient)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <defs>
                         <linearGradient id="glass-gradient" x1="0" y1="0" x2="1" y2="1">
@@ -372,7 +372,7 @@
         </div>
     </nav>
     <script>
-    // --- Basket logic using localStorage ---
+    // 
     function getBasket() {
         try {
             return JSON.parse(localStorage.getItem('rlbasket')) || [];
@@ -423,7 +423,7 @@
     <script>
     document.querySelectorAll('.navigation-tab-item').forEach(item => {
       item.addEventListener('click', function(e) {
-        // Only fade if navigating to another page
+        
         const href = this.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
         if (href) {
           e.preventDefault();
@@ -435,7 +435,7 @@
       });
     });
 
-    // Also fade in on page load
+    
     window.addEventListener('DOMContentLoaded', () => {
       document.body.classList.remove('fade-out');
     });
@@ -455,12 +455,12 @@
             badge.style.display = 'none';
         }
     }
-    // Update badge on page load and after basket changes
+    
     updateBasketBadge();
     window.addEventListener('storage', updateBasketBadge);
-    window.updateBasketBadge = updateBasketBadge; // For manual calls
+    window.updateBasketBadge = updateBasketBadge; 
 
-    // Patch addToBasketAnim if it exists
+    
     if (typeof addToBasketAnim === "function") {
         const orig = addToBasketAnim;
         window.addToBasketAnim = function(...args) {
@@ -470,9 +470,7 @@
     }
     </script>
     <script>
-    /* KEEP existing basket functions above (getBasket, setBasket, removeFromBasket, renderBasket, updateBasketBadge) */
-
-    /* New checkout handler with conditional Stripe buy button for Quick Boost */
+   
     (function(){
   const btn = document.getElementById('checkout-btn');
   const container = document.getElementById('stripe-checkout-container');
