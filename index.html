@@ -210,7 +210,7 @@
                 height: 22px;
             }
         }
-        /* Add or update these styles in your <style> tag for better mobile friendliness */
+        
 
 @media (max-width: 900px) {
     .features-grid, .testimonials-grid, .how-steps {
@@ -1380,7 +1380,7 @@
     <div class="bg-shape shape1"></div>
     <div class="bg-shape shape2"></div>
     <div class="bg-shape shape3"></div>
-    <!-- Disclaimer Modal -->
+    
     <div id="mobile-disclaimer" style="display:none;position:fixed;z-index:99999;inset:0;background:rgba(24,26,32,0.97);backdrop-filter:blur(10px);align-items:center;justify-content:center;">
       <div style="background:rgba(255,255,255,0.07);border-radius:2em;box-shadow:0 8px 32px #6366f122,0 1.5px 4px rgba(0,0,0,0.04);padding:2.2em 1.5em 2em 1.5em;max-width:95vw;width:370px;text-align:center;border:2.5px solid #23243a;">
         <div style="font-size:2.1rem;color:#ff3b30;margin-bottom:0.7em;">⚠️</div>
@@ -1411,26 +1411,26 @@
     <nav class="navigation-tab navigation-tab--compact" style="left:50vw;transform:translateX(-50%);">
         <div class="navigation-tab-item active" onclick="window.location.href='index.html'" style="--nav-index:0">
             <span class="navigation-tab__icon">
-                <!-- Home Icon -->
+               
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg>
             </span>
         </div>
         <div class="navigation-tab-item" onclick="window.location.href='services.html'" style="--nav-index:1">
             <span class="navigation-tab__icon">
-                <!-- Services Icon (Tag) -->
+                
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
             </span>
         </div>
         <div class="navigation-tab-item" onclick="window.location.href='basket.html'" style="--nav-index:2">
             <span class="navigation-tab__icon" style="position:relative;">
-                <!-- Basket Icon (Shopping Bag) -->
+                
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                 <span id="basket-badge" style="display:none;position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;background:#f43f5e;color:#fff;border-radius:50%;font-size:0.95rem;font-weight:700;line-height:20px;text-align:center;box-shadow:0 2px 8px #f43f5e44;pointer-events:none;z-index:2;"></span>
             </span>
         </div>
         <div class="navigation-tab-item" onclick="window.location.href='chat.html'" style="--nav-index:3">
             <span class="navigation-tab__icon">
-                <!-- Glassy Chat Bubble Icon -->
+                
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="url(#glass-gradient)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <defs>
                         <linearGradient id="glass-gradient" x1="0" y1="0" x2="1" y2="1">
@@ -1631,7 +1631,7 @@ updateBasketBadge();
 window.addEventListener('storage', updateBasketBadge);
 window.updateBasketBadge = updateBasketBadge;
 
-// Patch addToBasketAnim if it exists
+
 if (typeof addToBasketAnim === "function") {
     const orig = addToBasketAnim;
     window.addToBasketAnim = function(...args) {
@@ -1641,7 +1641,7 @@ if (typeof addToBasketAnim === "function") {
 }
 </script>
     <script>
-    // Show disclaimer on first visit (per session)
+    
     window.addEventListener('DOMContentLoaded', () => {
       if (!sessionStorage.getItem('rl_mobile_disclaimer')) {
         document.getElementById('mobile-disclaimer').style.display = 'flex';
